@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "humber-http-5226-collaborative-project", "humber-http-5226-collaborative-project.csproj", "{D07CADB9-4E2B-4C60-85E7-95E86EB4E8DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D07CADB9-4E2B-4C60-85E7-95E86EB4E8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07CADB9-4E2B-4C60-85E7-95E86EB4E8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07CADB9-4E2B-4C60-85E7-95E86EB4E8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07CADB9-4E2B-4C60-85E7-95E86EB4E8DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FE5D3C7-6E73-4D21-A027-03702C62234A}
+	EndGlobalSection
+EndGlobal
