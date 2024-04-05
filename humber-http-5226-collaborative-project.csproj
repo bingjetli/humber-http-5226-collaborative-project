@@ -190,10 +190,16 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CafeController.cs" />
     <Compile Include="Controllers\CafeDataController.cs" />
+    <Compile Include="Controllers\CourierLicenseController.cs" />
+    <Compile Include="Controllers\CourierLicenseDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\ItemDataController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrderDataController.cs" />
+    <Compile Include="Controllers\OrderItemController.cs" />
+    <Compile Include="Controllers\OrderItemDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -286,14 +292,29 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Cafe\New.cshtml" />
     <Content Include="Views\Cafe\List.cshtml" />
-    <Content Include="Views\Cafe\DeleteConfirm.cshtml" />
-    <Content Include="Views\Cafe\Details.cshtml" />
+    <Content Include="Views\Cafe\New.cshtml" />
     <Content Include="Views\Cafe\Edit.cshtml" />
+    <Content Include="Views\Cafe\Details.cshtml" />
+    <Content Include="Views\Cafe\Error.cshtml" />
+    <Content Include="Views\Cafe\DeleteConfirm.cshtml" />
+    <Content Include="Views\Order\New.cshtml" />
+    <Content Include="Views\Order\List.cshtml" />
+    <Content Include="Views\Order\Error.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Order\DeleteConfirm.cshtml" />
+    <Content Include="Views\Item\New.cshtml" />
+    <Content Include="Views\Item\List.cshtml" />
+    <Content Include="Views\Item\Error.cshtml" />
+    <Content Include="Views\Item\Edit.cshtml" />
+    <Content Include="Views\Item\Details.cshtml" />
+    <Content Include="Views\Item\DeleteConfirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Order\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\CourierLicense\" />
+    <Folder Include="Views\OrderItem\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

@@ -1,35 +1,38 @@
-﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderDto> //fix this (remove completely??)
+
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "Create";
 }
+
 <h2>Create Cafe</h2>
 <form action="/Cafe/Create" method="POST">
   
     <div>
-        <label>OverpassId:</label> <input type="number" name="OverpassId">
+        <label>Name:</label> <input type="text" name="Name" />
     </div>
     <div>
-        <label>Latitude:</label> <input type="text" name="Latitude" >
+        <label>Address:</label> <input type="text" name="Address" />
     </div>
     <div>
-        <label>Longitude:</label> <input type="text" name="Longitude">
+        <label>OverpassId:</label> <input type="text" name="OverpassId" />
     </div>
     <div>
-        <label>Name:</label> <input type="text" name="Name">
+        <label>Latitude:</label> <input type="text" name="Latitude" />
     </div>
     <div>
-        <label>Address:</label> <input type="text" name="Address">
+        <label>Longitude:</label> <input type="text" name="Longitude" />
     </div>
     <div>
-        <label>Phone:</label> <input type="text" name="Phone">
+        <label>Phone:</label> <input type="text" name="Phone" />
     </div>
     <div>
-        <label>Description:</label> <input type="text" name="Description">
+        <label>Description:</label> <input type="text" name="Description" />
     </div>
     <div>
-        <label>Website:</label> <input type="text" name="Website">
+        <label>Website:</label> <input type="text" name="Website" />
     </div>
     <div>
-        <input type="submit" value="Add Cafe">
+        <input type="submit" value="Add Cafe" />
     </div>
+
 </form>

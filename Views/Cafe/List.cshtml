@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>
+
 @{
     ViewBag.Title = "List";
 }
@@ -17,9 +18,6 @@
 
 @foreach (var Cafe in Model)
 {
-        <div>
-            <div><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.Name</a></div>
-            <div>Address: @Cafe.Address</div>
-        </div>
+    <h4><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.CafeName</a></h4>
    
 }

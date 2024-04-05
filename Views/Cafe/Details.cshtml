@@ -1,4 +1,5 @@
-﻿@model humber_http_5226_collaborative_project.Models.viewmodel.DetailsCafe
+﻿@model humber_http_5226_collaborative_project.Models.ViewModels.DetailsCafe
+
 @{
     ViewBag.Title = "Details";
 }
@@ -7,6 +8,15 @@
 
 <a href="/Cafe/List" class="back-link">Back to List</a>
 
+        <h1>@Model.SelectedCafe.CafeName</h1>
+        <div>@Model.SelectedCafe.DistrictName</div>
+        <div>@Model.SelectedCafe.CafeAddress</div>
+        <div>@Model.SelectedCafe.CafeOverpassId</div>
+        <div>@Model.SelectedCafe.CafeLatitude</div>
+        <div>@Model.SelectedCafe.CafeLongitude</div>
+        <div>@Model.SelectedCafe.CafePhone</div>
+        <div>@Model.SelectedCafe.CafeDescription</div>
+        <div>@Model.SelectedCafe.CafeWebsite</div>
 <div>
     <h1>@Model.SelectedCafe.Name</h1>
     <div>@Model.SelectedCafe.Address</div>
@@ -16,5 +26,29 @@
     <div>
         <a href="/Cafe/Edit/@Model.SelectedCafe.CafeId">Update</a>
         <a href="/Cafe/DeleteConfirm/@Model.SelectedCafe.CafeId">Delete</a>
+    </div>
+
+<div>
+    <h2>Items in @Model.SelectedCafe.CafeName:</h2>
+    <ul class="item-list">
+        @foreach (var item in Model.AvailableItems)
+        {
+            <li>
+                <a href="/Item/Details/@item.ItemId">@item.ItemName</a>
+                <a href="/Cafe/Unassociate/@Model.SelectedCafe.CafeId?ItemId=@item.ItemId">[x]</a>
+            </li>
+        }
+    </ul>
+    <div>
+        <h4>Add new Item to @Model.SelectedCafe.CafeName</h4>
+        <form method="POST" action="/Cafe/Associate/@Model.SelectedCafe.CafeId">
+            <select name="ItemId">
+                @foreach (var item in Model.CurrentItems)
+                {
+                    <option value="@item.ItemId">@item.ItemName</option>
+                }
+            </select>
+            <input type="submit" value="Add Item" />
+        </form>
     </div>
 </div>

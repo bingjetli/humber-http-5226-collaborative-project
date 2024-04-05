@@ -1,4 +1,5 @@
-﻿﻿@model humber_http_5226_collaborative_project.Models.CafeDto
+﻿@model humber_http_5226_collaborative_project.Models.CafeDto
+
 @{
     ViewBag.Title = "DeleteConfirm";
 }
@@ -7,7 +8,10 @@
 
 <h2>Are you sure you want to delete this cafe?</h2>
 <a href="/Cafe/List">Cancel</a>
-<h2>@Model.Name</h2>
+<h2>@Model.CafeName</h2>
+<div>District: @Model.DistrictName</div>
+<div>Address: @Model.CafeAddress</div>
 <form action="/Cafe/Delete/@Model.CafeId" method="POST">
     <input type="submit" value="Confirm Delete" />
 </form>
+
