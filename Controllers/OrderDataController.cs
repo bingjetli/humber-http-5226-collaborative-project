@@ -1,4 +1,5 @@
-﻿using System;
+﻿using humber_http_5226_collaborative_project.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -41,6 +42,7 @@ namespace humber_http_5226_collaborative_project.Controllers
                 Orders = db.Orders.Where(o => o.OrderId.Contains(SearchKey)).ToList();
             }
             List<OrderDto> OrderDtos = new List<OrderDto>();
+
             Orders.ForEach(o => OrderDtos.Add(new OrderDto()
             {
                 OrderId = o.OrderId,

@@ -4,7 +4,10 @@
     ViewBag.Title = "List";
 }
 
+<h2>List</h2>
+
 <h2>Browse Cafes</h2>
+<a href="/Cafe/New" id="newCafe">New Cafe</a>
 
 <form action="/Cafe/List" method="GET">
     <div>
@@ -16,5 +19,5 @@
 @foreach (var Cafe in Model)
 {
     <h4><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.CafeName</a></h4>
-       
+   
 }

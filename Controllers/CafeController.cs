@@ -1,4 +1,5 @@
 ﻿using humber_http_5226_collaborative_project.Models;
+using humber_http_5226_collaborative_project.Models.viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -58,7 +59,7 @@ namespace humber_http_5226_collaborative_project.Controllers
 
             Debug.WriteLine("The cafe recieved is: " + SelectedCafe.CafeId);
             Debug.WriteLine(SelectedCafe.Name);
-
+           
             //show associated items with this cafe
             url = "itemdata/listitemsforcafe/" + id;
             response = client.GetAsync(url).Result;
@@ -166,7 +167,7 @@ namespace humber_http_5226_collaborative_project.Controllers
             url = "orderdata/listorders/";
             response = client.GetAsync(url).Result;
             IEnumerable<OrderDto> OrderOptions = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
-
+    
             ViewModel.OrderOptions = OrderOptions;
             return View(ViewModel);
         }

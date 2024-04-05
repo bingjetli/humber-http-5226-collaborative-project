@@ -1,4 +1,5 @@
-﻿using System;
+﻿using humber_http_5226_collaborative_project.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -193,13 +194,13 @@ namespace humber_http_5226_collaborative_project.Controllers
             if (SelectedCafe == null || SelectedItem == null)
             {
                 return NotFound();
-            }
+        }
 
             Debug.WriteLine("input cafe id is: " + cafeid);
 
             SelectedCafe.Items.Remove(SelectedItem);
             db.SaveChanges();
-
+      
             return Ok();
         }
 
@@ -228,10 +229,13 @@ namespace humber_http_5226_collaborative_project.Controllers
                 Latitude = Cafe.Latitude,
                 Longitude = Cafe.Longitude,
                 Name = Cafe.Name,
+                OverpassId = Cafe.OverpassId,
                 Address = Cafe.Address,
                 Phone = Cafe.Phone,
                 Description = Cafe.Description,
                 Website = Cafe.Website,
+                Latitude = Cafe.Latitude,
+                Longitude = Cafe.Longitude
             };
             if (Cafe == null)
             {

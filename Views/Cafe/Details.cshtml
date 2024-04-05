@@ -17,10 +17,16 @@
         <div>@Model.SelectedCafe.CafePhone</div>
         <div>@Model.SelectedCafe.CafeDescription</div>
         <div>@Model.SelectedCafe.CafeWebsite</div>
-        <div>
-            <a href="/Cafe/Edit/@Model.SelectedCafe.CafeId">Update</a>
-            <a href="/Cafe/DeleteConfirm/@Model.SelectedCafe.CafeId">Delete</a>
-        </div>
+<div>
+    <h1>@Model.SelectedCafe.Name</h1>
+    <div>@Model.SelectedCafe.Address</div>
+    <div>@Model.SelectedCafe.Phone</div>
+    <div>@Model.SelectedCafe.Description</div>
+    <div>@Model.SelectedCafe.Website</div>
+    <div>
+        <a href="/Cafe/Edit/@Model.SelectedCafe.CafeId">Update</a>
+        <a href="/Cafe/DeleteConfirm/@Model.SelectedCafe.CafeId">Delete</a>
+    </div>
 
 <div>
     <h2>Items in @Model.SelectedCafe.CafeName:</h2>
