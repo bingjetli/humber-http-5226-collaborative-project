@@ -1,0 +1,21 @@
+﻿@model humber_http_5226_collaborative_project.OrderDto
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Update Order</h2>
+<form action="/Order/Update/@Model.OrderId" method="POST">
+    <div>
+        @* Pass through the Order ID *@
+        <input type="text" name="OrderId" value="@Model.OrderId" />
+    </div>
+    <div>
+        <label>Name:</label> <input type="text" name="OrderName" value="@Model.OrderName" />
+    </div>
+    <div>
+        <input type="submit" value="Update Order" />
+
+    </div>
+</form>
+

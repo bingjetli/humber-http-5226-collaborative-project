@@ -1,0 +1,25 @@
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderDto>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Browse Orders</h2>
+<a href="/Order/New">New Order</a>
+
+<form action="/Order/List" method="GET">
+    <div>
+        <input type="text" name="SearchKey" />
+        <input type="submit" value="Search" />
+    </div>
+</form>
+
+@foreach (var Order in Model)
+{
+    <div>
+        <h2>
+            <a href="/Order/Details/@Order.OrderId">@Order.OrderName</a>
+        </h2>
+    </div>
+}
+

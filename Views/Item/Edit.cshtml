@@ -1,0 +1,20 @@
+﻿@model humber_http_5226_collaborative_project.Models.ItemDto
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Update Item</h2>
+<form action="/Item/Update/@Model.ItemId" method="POST">
+    <div>
+        @* Pass through the Item ID *@
+        <input type="text" name="ItemId" value="@Model.ItemId" />
+    </div>
+    <div>
+        <label>Item:</label> <input type="text" name="ItemName" value="@Model.ItemName" />
+    </div>
+    <div>
+        <input type="submit" value="Update Item" />
+    </div>
+</form>
+

@@ -34,5 +34,19 @@ namespace humber_http_5226_collaborative_project.Models {
 
     //TODO: Fix this relationship at some point...
     public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
-  }
+
+        //CourierLicenseDto -Sarah
+        //ApplicationUser?
+        public class CourierLicenseDto
+        {
+            public int CourierLicenseId { get; set; }
+            public string VehicleType { get; set; }
+            public bool IsValid { get; set; }
+            public bool IsAvailable { get; set; }
+            public DateTime IssueDate { get; set; }
+
+            public int OrderId { get; set; }
+
+        }
+    }
 }
