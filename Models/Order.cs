@@ -29,4 +29,16 @@ namespace humber_http_5226_collaborative_project.Models {
 
     public string Status { get; set; }
   }
+
+    public class OrderDto
+    {
+        public int OrderId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int CafeId { get; set; }
+        public string CafeName { get; set; }
+        public int? CourierLicenseId { get; set; }
+        public string Status { get; set; }
+    }
+
+
 }

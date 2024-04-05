@@ -1,0 +1,35 @@
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>
+@{
+    ViewBag.Title = "New";
+}
+<h2>Create Cafe</h2>
+<form action="/Cafe/Create" method="POST">
+  
+    <div>
+        <label>OverpassId:</label> <input type="number" name="OverpassId">
+    </div>
+    <div>
+        <label>Latitude:</label> <input type="text" name="Latitude" >
+    </div>
+    <div>
+        <label>Longitude:</label> <input type="text" name="Longitude">
+    </div>
+    <div>
+        <label>Name:</label> <input type="text" name="Name">
+    </div>
+    <div>
+        <label>Address:</label> <input type="text" name="Address">
+    </div>
+    <div>
+        <label>Phone:</label> <input type="text" name="Phone">
+    </div>
+    <div>
+        <label>Description:</label> <input type="text" name="Description">
+    </div>
+    <div>
+        <label>Website:</label> <input type="text" name="Website">
+    </div>
+    <div>
+        <input type="submit" value="Add Cafe">
+    </div>
+</form>

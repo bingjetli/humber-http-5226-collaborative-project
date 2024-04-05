@@ -1,0 +1,25 @@
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<h2>Browse Cafes</h2>
+<a href="/Cafe/New" id="newCafe">New Cafe</a>
+
+<form action="/Cafe/List" method="GET">
+    <div>
+        <input type="text" name="SearchKey" />
+        <input type="submit" value="Search" />
+    </div>
+</form>
+
+@foreach (var Cafe in Model)
+{
+        <div>
+            <div><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.Name</a></div>
+            <div>Address: @Cafe.Address</div>
+        </div>
+   
+}

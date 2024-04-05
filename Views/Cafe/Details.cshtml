@@ -1,0 +1,20 @@
+﻿@model humber_http_5226_collaborative_project.Models.viewmodel.DetailsCafe
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<a href="/Cafe/List" class="back-link">Back to List</a>
+
+<div>
+    <h1>@Model.SelectedCafe.Name</h1>
+    <div>@Model.SelectedCafe.Address</div>
+    <div>@Model.SelectedCafe.Phone</div>
+    <div>@Model.SelectedCafe.Description</div>
+    <div>@Model.SelectedCafe.Website</div>
+    <div>
+        <a href="/Cafe/Edit/@Model.SelectedCafe.CafeId">Update</a>
+        <a href="/Cafe/DeleteConfirm/@Model.SelectedCafe.CafeId">Delete</a>
+    </div>
+</div>
