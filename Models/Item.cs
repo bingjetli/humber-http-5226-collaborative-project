@@ -31,7 +31,9 @@ namespace humber_http_5226_collaborative_project.Models {
             public string Description { get; set; }
             public double Price { get; set; }
 
+            // Inclusion of cafes in DTO
+            public ICollection<CafeDto> CafesWithThisItem { get; set; }
 
-        }
+
     }
-}
+    }

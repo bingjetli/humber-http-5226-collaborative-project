@@ -1,14 +1,23 @@
-﻿
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.ItemDto>
+
 @{
     ViewBag.Title = "New";
 }
 
 <h2>Create Item</h2>
+
 <form action="/Item/Create" method="POST">
     <div>
-        <label>Item:</label> <input type="text" name="ItemName" />
+        <label>Name:</label> <input type="text" name="ItemName" />
+    </div>
+    <div>
+        <label>Description:</label> <input type="text" name="ItemDescription" />
+    </div>
+    <div>
+        <label>Price:</label> <input type="text" name="ItemPrice" />
+    </div>
+    <div>
         <input type="submit" value="Create Item" />
-
     </div>
 </form>
 

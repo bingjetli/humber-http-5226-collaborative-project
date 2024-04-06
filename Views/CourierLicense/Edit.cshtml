@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit Courier License</h2>
+<a href="/CourierLicense/List">Back to List</a>
+
+<form action="/CourierLicense/Edit/@Model.CourierLicenseId" method="post">
+    
+    <div>
+        <label for="VehicleType">Vehicle Type:</label>
+        <input type="text" id="VehicleType" name="VehicleType" value="@Model.VehicleType" required />
+    </div>
+    <div>
+        <label for="IsValid">Is Valid:</label>
+        <select id="IsValid" name="IsValid">
+            <option value="true" @(Model.IsValid ? "selected" : "")>Yes</option>
+            <option value="false" @(!Model.IsValid ? "selected" : "")>No</option>
+        </select>
+    </div>
+    <div>
+        <label for="IsAvailable">Is Available:</label>
+        <select id="IsAvailable" name="IsAvailable">
+            <option value="true" @(Model.IsAvailable ? "selected" : "")>Yes</option>
+            <option value="false" @(!Model.IsAvailable ? "selected" : "")>No</option>
+        </select>
+    </div>
+    <div>
+        <label for="IssueDate">Issue Date:</label>
+        <input type="date" id="IssueDate" name="IssueDate" value="@Model.IssueDate.ToString("yyyy-MM-dd")" required />
+    </div>
+    <div>
+        <button type="submit">Update</button>
+    </div>
+</form>
+
+
+

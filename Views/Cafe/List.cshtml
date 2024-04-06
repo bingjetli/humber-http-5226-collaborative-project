@@ -4,11 +4,11 @@
     ViewBag.Title = "List";
 }
 
-<h2>List</h2>
-
 <h2>Browse Cafes</h2>
-<a href="/Cafe/New" id="newCafe">New Cafe</a>
+<!--Back to list button-->
+<a href="/Cafe/New">New Cafe</a>
 
+<!--Cafe search field-->
 <form action="/Cafe/List" method="GET">
     <div>
         <input type="text" name="SearchKey" />
@@ -16,8 +16,12 @@
     </div>
 </form>
 
+<!-- Loop displaying list of cafes-->
 @foreach (var Cafe in Model)
 {
-    <h4><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.CafeName</a></h4>
+    <div>
+        <h3><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.Name</a></h3>
+        <p>@Cafe.Address</p>
+    </div>
    
 }

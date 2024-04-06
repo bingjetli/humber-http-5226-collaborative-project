@@ -33,6 +33,7 @@ namespace humber_http_5226_collaborative_project.Models
         //A Cafe can have many Orders associated with it, but an Order can only be
         //associated to 1 Cafe.
         public virtual ICollection<Order> Orders { get; set; }
+    }
 
         //CafeDto -Sarah
         public class CafeDto
@@ -47,7 +48,10 @@ namespace humber_http_5226_collaborative_project.Models
             public string Description { get; set; }
             public string Website { get; set; }
 
+            // Inclusion of menu items in DTO
+            public ICollection<ItemDto> Menu { get; set; }
 
-        }
+            // Inclusion of order history in DTO
+            public ICollection<OrderDto> Orders { get; set; }
     }
-}
+    }

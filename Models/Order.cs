@@ -38,9 +38,19 @@ namespace humber_http_5226_collaborative_project.Models {
         {
             public int OrderId { get; set; }
             public DateTime CreatedAt { get; set; }
+
+            // Inclusion of order items in DTO
             public virtual ICollection<OrderItem> OrderItems { get; set; }
 
+            // Inclusion of cafe in DTO
+            public int CafeId { get; set; }
+            public virtual Cafe Cafe { get; set; }
 
-        }
+            // Inclusion of courier in DTO
+            public int? CourierLicenseId { get; set; }
+            public virtual CourierLicense CourierLicense { get; set; }
+            public string Status { get; set; }
+
+
     }
 }

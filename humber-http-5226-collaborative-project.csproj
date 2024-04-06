@@ -310,10 +310,15 @@
     <Content Include="Views\Item\Edit.cshtml" />
     <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Views\Item\DeleteConfirm.cshtml" />
+    <Content Include="Views\CourierLicense\New.cshtml" />
+    <Content Include="Views\CourierLicense\List.cshtml" />
+    <Content Include="Views\CourierLicense\Error.cshtml" />
+    <Content Include="Views\CourierLicense\Edit.cshtml" />
+    <Content Include="Views\CourierLicense\Details.cshtml" />
+    <Content Include="Views\CourierLicense\DeleteConfirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CourierLicense\" />
     <Folder Include="Views\OrderItem\" />
   </ItemGroup>
   <ItemGroup>

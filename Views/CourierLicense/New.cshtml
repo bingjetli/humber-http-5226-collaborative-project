@@ -1,0 +1,44 @@
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicenseDto>
+
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>Add New Courier License</h2>
+
+<form action="/CourierLicense/Create" method="post">
+
+    <!--Vehicle-->
+    <div>
+        <label for="VehicleType">Vehicle Type:</label>
+        <input type="text" id="VehicleType" name="VehicleType" required />
+    </div>
+
+    <!--Whether a courier license is validated-->
+    <div>
+        <label for="IsValid">Is Valid:</label>
+        <select id="IsValid" name="IsValid">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <!--Whether a courier is available-->
+    <div>
+        <label for="IsAvailable">Is Available:</label>
+        <select id="IsAvailable" name="IsAvailable">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+    </div>
+
+    <!--When the license was issued-->
+    <div>
+        <label for="IssueDate">Issue Date:</label>
+        <input type="date" id="IssueDate" name="IssueDate" required />
+    </div>
+    <div>
+        <button type="submit">Create</button>
+    </div>
+</form>
+

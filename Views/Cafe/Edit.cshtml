@@ -1,40 +1,37 @@
-﻿@model humber_http_5226_collaborative_project.Models.ViewModels.UpdateCafe
+﻿@model humber_http_5226_collaborative_project.Models.CafeDto
 
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Update Cafe</h2>
-<form action="/Cafe/Update/@Model.selectedcafe.CafeId" method="POST">
+<form action="/Cafe/Update/@Model.CafeId" method="POST">
     <div>
-        <input type="text" name="CafeId" value="@Model.selectedcafe.CafeId" />
+        <input type="text" name="CafeId" value="@Model.CafeId" />
     </div>
     <div>
-        <label>Name:</label> <input type="text" name="Name" value="@Model.selectedcafe.CafeName" />
+        <label>Name:</label> <input type="text" name="Name" value="@Model.Name" />
     </div>
     <div>
-        <label>Address:</label> <input type="text" name="Address" value="@Model.selectedcafe.CafeAddress" />
+        <label>Address:</label> <input type="text" name="Address" value="@Model.Address" />
     </div>
     <div>
-        <label>OverpassId:</label> <input type="text" name="OverpassId" value="@Model.selectedcafe.CafeOverpassId" />
+        <label>OverpassId:</label> <input type="text" name="OverpassId" value="@Model.OverpassId" />
     </div>
     <div>
-        <label>Latitude:</label> <input type="text" name="Latitude" value="@Model.selectedcafe.CafeLatitude" />
+        <label>Latitude:</label> <input type="text" name="Latitude" value="@Model.Latitude" />
     </div>
     <div>
-        <label>Longitude:</label> <input type="text" name="Longitude" value="@Model.selectedcafe.CafeLongitude" />
+        <label>Longitude:</label> <input type="text" name="Longitude" value="@Model.Longitude" />
     </div>
     <div>
-        <label>Phone:</label> <input type="text" name="Phone" value="@Model.selectedcafe.CafePhone" />
+        <label>Phone:</label> <input type="text" name="Phone" value="@Model.Phone" />
     </div>
     <div>
-        <label>Description:</label> <input type="text" name="Description" value="@Model.selectedcafe.CafeDescription" />
+        <label>Description:</label> <input type="text" name="Description" value="@Model.Description" />
     </div>
     <div>
-        <label>Website:</label> <input type="text" name="Website" value="@Model.selectedcafe.CafeWebsite" />
-    </div>
-    <div>
-        <label>Image:</label> <input type="file" name="Image" value="@Model.selectedcafe.CafeImage" />
+        <label>Website:</label> <input type="text" name="Website" value="@Model.Website" />
     </div>
     <div>
         <input type="submit" value="Update Cafe" />

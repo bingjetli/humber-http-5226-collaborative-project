@@ -1,5 +1,5 @@
 ﻿using humber_http_5226_collaborative_project.Models;
-using humber_http_5226_collaborative_project.Models.viewmodel;
+using humber_http_5226_collaborative_project.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
