@@ -1,4 +1,5 @@
-﻿using System;
+﻿using humber_http_5226_collaborative_project.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
     static ItemController() {
       client = new HttpClient();
-      client.BaseAddress = new Uri("https://localhost:44321/api/");
+      client.BaseAddress = new Uri("https://localhost:44328/api/");
     }
 
     // GET: Item/List
@@ -27,11 +28,13 @@ namespace humber_http_5226_collaborative_project.Controllers {
       string url = "itemdata/listitems";
       HttpResponseMessage response = client.GetAsync(url).Result;
 
+
       //IEnumerable<ItemDto> Items = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
+      IEnumerable < ItemDto > Items = new List<ItemDto>();
 
 
       //return View(Items);
-      return View();
+      return View(Items);
     }
 
     // GET: Item/Details/5

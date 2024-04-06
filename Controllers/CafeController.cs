@@ -18,7 +18,7 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
     static CafeController() {
       client = new HttpClient();
-      client.BaseAddress = new Uri("https://localhost:44321/api/");
+      client.BaseAddress = new Uri("https://localhost:44328/api/");
     }
 
     // GET: Cafe/List
