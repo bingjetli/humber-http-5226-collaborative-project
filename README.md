@@ -31,7 +31,7 @@ Our platform supports comprehensive Create, Read, Update, and Delete (CRUD) oper
 - **Update**: Modify details of existing items.
 - **Delete**: Remove items from a cafe's menu.
 
-#### Courier License
+#### Courier Licenses
 - **Create**: Register a new courier.
 - **Read**: View courier details.
 - **Update**: Update courier information.
