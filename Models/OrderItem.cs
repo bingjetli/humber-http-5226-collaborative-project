@@ -22,13 +22,13 @@ namespace humber_http_5226_collaborative_project.Models {
     //The OrderItem will store a reference to an ItemId. The referenced item may
     //also be accessible from the `ReferencedItem` navigation property.
     [ForeignKey("Item")]
-    public int ItemId { get; set; }
+    public int? ItemId { get; set; }
     public virtual Item Item { get; set; }
 
     //The OrderItem will also store a reference to the order that it belongs to.
     //The Order can be accessed from the `ReferencedOrder` navigation property.
     [ForeignKey("Order")]
-    public int OrderId { get; set; }
+    public int? OrderId { get; set; }
     public virtual Order Order { get; set; }
 
 
@@ -52,7 +52,7 @@ namespace humber_http_5226_collaborative_project.Models {
   public class OrderItemDto {
     public int OrderItemId { get; set; }
     public int Quantity { get; set; }
-    public int OrderId { get; set; }
-    public int ItemId { get; set; }
+    public int? OrderId { get; set; }
+    public int? ItemId { get; set; }
   }
 }

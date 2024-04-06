@@ -18,7 +18,7 @@ namespace humber_http_5226_collaborative_project.Models {
     //The Order will also store a reference to the Cafe that the Order belongs to.
     //The Cafe can be referenced by the `ReferencedCafe` navigation property.
     [ForeignKey("Cafe")]
-    public int CafeId { get; set; }
+    public int? CafeId { get; set; }
     public virtual Cafe Cafe { get; set; }
 
     //This property is nullable, meaning it can be null if there isn't a courier
@@ -37,6 +37,7 @@ namespace humber_http_5226_collaborative_project.Models {
         CreatedAt = CreatedAt,
         CafeId = CafeId,
         CourierLicenseId = CourierLicenseId,
+        Status = Status,
       };
     }
 
@@ -47,9 +48,10 @@ namespace humber_http_5226_collaborative_project.Models {
     public int OrderId { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    public int CafeId { get; set; }
+    public int? CafeId { get; set; }
     public int? CourierLicenseId { get; set; }
+    public string Status { get; set; }
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; }
+    //public virtual ICollection<OrderItem> OrderItems { get; set; }
   }
 }

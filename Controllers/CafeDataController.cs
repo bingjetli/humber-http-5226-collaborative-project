@@ -36,6 +36,10 @@ namespace humber_http_5226_collaborative_project.Controllers {
         Cafes = db.Cafes.Where(c => c.Name.Contains(SearchKey)).ToList();
       }
 
+
+      /** BASIC CRUD ROUTES
+       */
+
       List<CafeDto> CafeDtos = new List<CafeDto>();
       Cafes.ForEach(c => CafeDtos.Add(new CafeDto() {
         CafeId = c.CafeId,
@@ -136,9 +140,159 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
-    /** HANDLE ASSOCIATIONS
+    /** ASSOCIATIVE ROUTES
      */
 
+    [HttpPost]
+    [Route("api/CafeData/LinkToItem/{cafe_id}/{item_id}")]
+    [ResponseType(typeof(void))]
+    public IHttpActionResult LinkToItem(int cafe_id, int item_id) {
+      Cafe cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
+      Item target_item = db.Items.Include(i => i.CafesWithThisItem).Where(i => i.ItemId == item_id).FirstOrDefault();
+
+
+      if (target_item == null || cafe == null) {
+        return BadRequest();
+      }
+
+
+      //Only create the link if it doesn't already exist.
+      if (cafe.Menu.Contains(target_item) == false) {
+        cafe.Menu.Add(target_item);
+      }
+      if (target_item.CafesWithThisItem.Contains(cafe) == false) {
+        target_item.CafesWithThisItem.Add(cafe);
+      }
+      db.SaveChanges();
+
+
+      return Ok();
+    }
+
+
+    [HttpPost]
+    [Route("api/CafeData/UnlinkWithItem/{cafe_id}/{item_id}")]
+    [ResponseType(typeof(void))]
+    public IHttpActionResult UnlinkWithItem(int cafe_id, int item_id) {
+      Cafe cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
+      Item target_item = db.Items.Include(i => i.CafesWithThisItem).Where(i => i.ItemId == item_id).FirstOrDefault();
+
+
+      if (target_item == null || cafe == null) {
+        return BadRequest();
+      }
+
+
+      //Only destroy the link if it exists.
+      if (cafe.Menu.Contains(target_item) == true) {
+        cafe.Menu.Remove(target_item);
+      }
+      if (target_item.CafesWithThisItem.Contains(cafe) == true) {
+        target_item.CafesWithThisItem.Remove(cafe);
+      }
+      db.SaveChanges();
+
+
+      return Ok();
+    }
+
+
+    [HttpGet]
+    [ResponseType(typeof(IEnumerable<ItemDto>))]
+    public IHttpActionResult GetLinkedItems(int id) {
+      Cafe cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == id).FirstOrDefault();
+
+
+      if (cafe == null) {
+        return BadRequest();
+      }
+
+
+      return Ok(cafe.Menu.AsEnumerable().Select(i => i.ToDto()));
+    }
+
+
+
+    [HttpPost]
+    [Route("api/CafeData/LinkToOrder/{cafe_id}/{order_id}")]
+    [ResponseType(typeof(void))]
+    public IHttpActionResult LinkToOrder(int cafe_id, int order_id) {
+      Cafe cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
+      Order target_order = db.Orders.Include(o => o.Cafe).Where(o => o.OrderId == order_id).FirstOrDefault();
+
+
+      if (target_order == null || cafe == null) {
+        return BadRequest();
+      }
+
+
+      if (target_order.Cafe.Equals(null)) {
+
+        //If the target order is already linked to a cafe, then the user must
+        //unlink with the previous cafe before linking to a new one.
+        return BadRequest();
+      }
+
+
+      //Only create the link if it doesn't already exist.
+      if (cafe.Orders.Contains(target_order) == false) {
+        cafe.Orders.Add(target_order);
+        target_order.CafeId = cafe_id;
+        target_order.Cafe = cafe;
+
+
+        db.SaveChanges();
+      }
+
+
+      return Ok();
+    }
+
+
+    [HttpPost]
+    [Route("api/CafeData/UnlinkWithOrder/{cafe_id}/{order_id}")]
+    [ResponseType(typeof(void))]
+    public IHttpActionResult UnlinkWithOrder(int cafe_id, int order_id) {
+      Cafe cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
+      Order target_order = db.Orders.Include(o => o.Cafe).Where(o => o.OrderId == order_id).FirstOrDefault();
+
+
+      if (target_order == null || cafe == null) {
+        return BadRequest();
+      }
+
+
+      if (cafe.Orders.Contains(target_order) == true) {
+        cafe.Orders.Remove(target_order);
+        target_order.CafeId = null;
+        target_order.Cafe = null;
+
+
+        db.SaveChanges();
+      }
+
+
+      return Ok();
+    }
+
+
+    [HttpGet]
+    [ResponseType(typeof(IEnumerable<OrderDto>))]
+    public IHttpActionResult GetLinkedOrders(int id) {
+      Cafe cafe = db.Cafes.Include(c => c.Orders).Where(c => c.CafeId == id).FirstOrDefault();
+
+
+      if (cafe == null) {
+        return BadRequest();
+      }
+
+
+      return Ok(cafe.Orders.AsEnumerable().Select(i => i.ToDto()));
+    }
+
+
+    /** LEGACY ROUTES
+     */
 
     /// <summary>
     /// Gathers information about a cafe related to a particular order ID -------> Change to list all orders for cafe
