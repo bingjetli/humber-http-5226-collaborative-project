@@ -32,21 +32,34 @@ namespace humber_http_5226_collaborative_project.Models {
 
     public virtual ICollection<Order> AssignedOrders { get; set; }
 
-    //TODO: Fix this relationship at some point...
+    //BL->TODO: Fix this relationship at some point...
     public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
 
-        //CourierLicenseDto -Sarah
-        //ApplicationUser?
-        public class CourierLicenseDto
-        {
-            public int CourierLicenseId { get; set; }
-            public string VehicleType { get; set; }
-            public bool IsValid { get; set; }
-            public bool IsAvailable { get; set; }
-            public DateTime IssueDate { get; set; }
 
-            public int OrderId { get; set; }
-
-        }
+    public CourierLicenseDto ToDto() {
+      return new CourierLicenseDto {
+        CourierLicenseId = CourierLicenseId,
+        VehicleType = VehicleType,
+        IsValid = IsValid,
+        IsAvailable = IsAvailable,
+        IssueDate = IssueDate
+      };
     }
+  }
+
+
+  //CourierLicenseDto -Sarah
+  //ApplicationUser?
+  public class CourierLicenseDto {
+    public int CourierLicenseId { get; set; }
+    public string VehicleType { get; set; }
+    public bool IsValid { get; set; }
+    public bool IsAvailable { get; set; }
+    public DateTime IssueDate { get; set; }
+
+    //BL: We don't need this, because CourierLicense stores a list of the orders
+    //assigned to this license through the `AssignedOrders` navigation property.
+    //public int OrderId { get; set; }
+
+  }
 }
