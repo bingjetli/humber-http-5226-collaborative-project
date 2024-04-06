@@ -32,15 +32,27 @@ namespace humber_http_5226_collaborative_project.Models {
     public virtual Order Order { get; set; }
 
 
-        //We don't need to reference the Cafe, because the Cafe can be referenced from
-        //the Order, which we already have a reference to.
+    //We don't need to reference the Cafe, because the Cafe can be referenced from
+    //the Order, which we already have a reference to.
 
-        //OrderItemDto -Sarah
-        public class OrderItemDto
-        {
-            public int OrderItemId { get; set; }
-            public int Quantity { get; set; }
 
-        }
+    public OrderItemDto ToDto() {
+      return new OrderItemDto {
+        OrderItemId = OrderItemId,
+        Quantity = Quantity,
+        OrderId = OrderId,
+        ItemId = ItemId,
+      };
     }
+
+  }
+
+
+  //OrderItemDto -Sarah
+  public class OrderItemDto {
+    public int OrderItemId { get; set; }
+    public int Quantity { get; set; }
+    public int OrderId { get; set; }
+    public int ItemId { get; set; }
+  }
 }

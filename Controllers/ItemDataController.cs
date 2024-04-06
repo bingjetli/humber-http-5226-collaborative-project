@@ -14,6 +14,89 @@ namespace humber_http_5226_collaborative_project.Controllers {
   public class ItemDataController : ApiController {
     private ApplicationDbContext db = new ApplicationDbContext();
 
+    [ResponseType(typeof(IEnumerable<ItemDto>))]
+    [HttpGet]
+    public IEnumerable<ItemDto> ListAll() {
+      return db.Items.AsEnumerable().Select(i => i.ToDto());
+    }
+
+
+    [ResponseType(typeof(ItemDto))]
+    [HttpGet]
+    public IHttpActionResult FindById(int id) {
+      Item result = db.Items.Find(id);
+
+      if (result == null) {
+        return NotFound();
+      }
+
+      return Ok(result.ToDto());
+    }
+
+
+    [ResponseType(typeof(ItemDto))]
+    [HttpPost]
+    public IHttpActionResult CreateNew(Item item) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+      Item added = db.Items.Add(item);
+      db.SaveChanges();
+
+      return Ok(added.ToDto());
+    }
+
+
+
+    [ResponseType(typeof(void))]
+    [HttpPost]
+    public IHttpActionResult Update(int id, Item item) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+
+      if (id != item.ItemId) {
+        return BadRequest();
+      }
+
+
+      db.Entry(item).State = EntityState.Modified;
+
+
+      try {
+        db.SaveChanges();
+      }
+      catch (DbUpdateConcurrencyException) {
+        if (!ItemExists(id)) {
+          return NotFound();
+        }
+        else {
+          throw;
+        }
+      }
+
+
+      return StatusCode(HttpStatusCode.NoContent);
+    }
+
+
+    [ResponseType(typeof(ItemDto))]
+    [HttpPost]
+    public IHttpActionResult Delete(int id) {
+      Item item = db.Items.Find(id);
+      if (item == null) {
+        return NotFound();
+      }
+
+      db.Items.Remove(item);
+      db.SaveChanges();
+
+      return Ok();
+    }
+
+
     /// <summary>
     /// Returns all Items in the system.
     /// </summary>

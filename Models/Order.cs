@@ -29,12 +29,27 @@ namespace humber_http_5226_collaborative_project.Models {
 
     public string Status { get; set; }
 
+
+
+    public OrderDto ToDto() {
+      return new OrderDto {
+        OrderId = OrderId,
+        CreatedAt = CreatedAt,
+        CafeId = CafeId,
+        CourierLicenseId = CourierLicenseId,
+      };
+    }
+
   }
 
   //OrderDto -Sarah
   public class OrderDto {
     public int OrderId { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public int CafeId { get; set; }
+    public int? CourierLicenseId { get; set; }
+
     public virtual ICollection<OrderItem> OrderItems { get; set; }
   }
 }

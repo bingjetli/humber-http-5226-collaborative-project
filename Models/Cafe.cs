@@ -35,6 +35,7 @@ namespace humber_http_5226_collaborative_project.Models {
 
     public CafeDto ToDto() {
       return new CafeDto {
+        CafeId = CafeId,
         Name = Name,
         Address = Address,
         Phone = Phone,
