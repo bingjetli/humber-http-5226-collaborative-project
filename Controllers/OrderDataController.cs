@@ -14,6 +14,89 @@ namespace humber_http_5226_collaborative_project.Controllers {
   public class OrderDataController : ApiController {
     private ApplicationDbContext db = new ApplicationDbContext();
 
+
+    [ResponseType(typeof(IEnumerable<OrderDto>))]
+    [HttpGet]
+    public IEnumerable<OrderDto> ListAll() {
+      return db.Orders.AsEnumerable().Select(o => o.ToDto());
+    }
+
+
+    [ResponseType(typeof(OrderDto))]
+    [HttpGet]
+    public IHttpActionResult FindById(int id) {
+      Order result = db.Orders.Find(id);
+
+      if (result == null) {
+        return NotFound();
+      }
+
+      return Ok(result.ToDto());
+    }
+
+
+    [ResponseType(typeof(OrderDto))]
+    [HttpPost]
+    public IHttpActionResult CreateNew(Order order) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+      Order added = db.Orders.Add(order);
+      db.SaveChanges();
+
+      return Ok(added.ToDto());
+    }
+
+
+
+    [ResponseType(typeof(void))]
+    [HttpPost]
+    public IHttpActionResult Update(int id, Order order) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+
+      if (id != order.OrderId) {
+        return BadRequest();
+      }
+
+
+      db.Entry(order).State = EntityState.Modified;
+
+
+      try {
+        db.SaveChanges();
+      }
+      catch (DbUpdateConcurrencyException) {
+        if (!OrderExists(id)) {
+          return NotFound();
+        }
+        else {
+          throw;
+        }
+      }
+
+
+      return StatusCode(HttpStatusCode.NoContent);
+    }
+
+
+    [ResponseType(typeof(OrderDto))]
+    [HttpPost]
+    public IHttpActionResult Delete(int id) {
+      Order order = db.Orders.Find(id);
+      if (order == null) {
+        return NotFound();
+      }
+
+      db.Orders.Remove(order);
+      db.SaveChanges();
+
+      return Ok();
+    }
+
     /// <summary>
     /// Returns all orders in the system that matches the search key (orderid)
     /// </summary>

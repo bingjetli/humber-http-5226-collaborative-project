@@ -20,6 +20,16 @@ namespace humber_http_5226_collaborative_project.Models {
     public double Price { get; set; }
     public virtual ICollection<Cafe> CafesWithThisItem { get; set; }
 
+
+    public ItemDto ToDto() {
+      return new ItemDto {
+        ItemId = ItemId,
+        Name = Name,
+        Description = Description,
+        Price = Price,
+      };
+    }
+
   }
 
   //ItemDto -Sarah

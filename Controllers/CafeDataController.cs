@@ -1,5 +1,4 @@
 ﻿using humber_http_5226_collaborative_project.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -7,10 +6,10 @@ using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using static humber_http_5226_collaborative_project.Models.Cafe;
+using static System.Data.Entity.Infrastructure.Design.Executor;
+
 
 namespace humber_http_5226_collaborative_project.Controllers {
   public class CafeDataController : ApiController {
@@ -26,8 +25,8 @@ namespace humber_http_5226_collaborative_project.Controllers {
     /// GET: api/CafeData/ListCafes/creeds
     /// </example>
     [HttpGet]
-    [Route("api/CafeData/ListCafes/{SearchKey?}")]
-    public IEnumerable<CafeDto> ListCafes(string SearchKey = null) {
+    [Route("api/CafeData/Search/{SearchKey?}")]
+    public IEnumerable<CafeDto> Search(string SearchKey = null) {
       List<Cafe> Cafes = new List<Cafe>();
 
       if (SearchKey == null) {
@@ -52,6 +51,94 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
       return CafeDtos;
     }
+
+
+    [ResponseType(typeof(IEnumerable<CafeDto>))]
+    [HttpGet]
+    public IEnumerable<CafeDto> ListAll() {
+      return db.Cafes.AsEnumerable().Select(c => c.ToDto());
+    }
+
+
+    [ResponseType(typeof(CafeDto))]
+    [HttpGet]
+    public IHttpActionResult FindById(int id) {
+      Cafe result = db.Cafes.Find(id);
+
+      if (result == null) {
+        return NotFound();
+      }
+
+      return Ok(result.ToDto());
+    }
+
+
+    [ResponseType(typeof(CafeDto))]
+    [HttpPost]
+    public IHttpActionResult CreateNew(Cafe cafe) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+      Cafe added = db.Cafes.Add(cafe);
+      db.SaveChanges();
+
+      return Ok(added.ToDto());
+    }
+
+
+
+    [ResponseType(typeof(void))]
+    [HttpPost]
+    public IHttpActionResult Update(int id, Cafe cafe) {
+      if (!ModelState.IsValid) {
+        return BadRequest(ModelState);
+      }
+
+
+      if (id != cafe.CafeId) {
+        return BadRequest();
+      }
+
+
+      db.Entry(cafe).State = EntityState.Modified;
+
+
+      try {
+        db.SaveChanges();
+      }
+      catch (DbUpdateConcurrencyException) {
+        if (!CafeExists(id)) {
+          return NotFound();
+        }
+        else {
+          throw;
+        }
+      }
+
+
+      return StatusCode(HttpStatusCode.NoContent);
+    }
+
+
+    [ResponseType(typeof(CafeDto))]
+    [HttpPost]
+    public IHttpActionResult Delete(int id) {
+      Cafe cafe = db.Cafes.Find(id);
+      if (cafe == null) {
+        return NotFound();
+      }
+
+      db.Cafes.Remove(cafe);
+      db.SaveChanges();
+
+      return Ok();
+    }
+
+
+    /** HANDLE ASSOCIATIONS
+     */
+
 
     /// <summary>
     /// Gathers information about a cafe related to a particular order ID -------> Change to list all orders for cafe
