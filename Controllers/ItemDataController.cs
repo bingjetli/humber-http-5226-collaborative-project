@@ -18,6 +18,15 @@ namespace humber_http_5226_collaborative_project.Controllers {
     /** BASIC CRUD ROUTES
      */
 
+    /// <summary>
+    /// Standard route to fetch a list of all the elements in this database table.
+    /// </summary>
+    /// <returns>
+    /// A list of Items in the form ItemDto.
+    /// </returns>
+    /// <example>
+    /// GET: api/ItemData/ListAll
+    /// </example>
     [ResponseType(typeof(IEnumerable<ItemDto>))]
     [HttpGet]
     public IEnumerable<ItemDto> ListAll() {
@@ -25,6 +34,16 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to find an element by their id in this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the Item doesn't exist. HTTP 200 with the Item in ItemDto form otherwise.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <example>
+    /// GET: api/ItemData/FindById/{id}
+    /// </example>
     [ResponseType(typeof(ItemDto))]
     [HttpGet]
     public IHttpActionResult FindById(int id) {
@@ -38,6 +57,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to create a new element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 400 If the payload is invalid. HTTP 200 with the added element in Dto
+    /// form otherwise.
+    /// </returns>
+    /// <param name="item">The POST payload containing JSON data modeled after this database model.</param>
+    /// <example>
+    /// POST: api/ItemData/CreateNew
+    /// </example>
     [ResponseType(typeof(ItemDto))]
     [HttpPost]
     public IHttpActionResult CreateNew(Item item) {
@@ -53,6 +83,19 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
 
 
+    /// <summary>
+    /// Standard route to update an element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 400 if the POST payload is invalid, or the id is invalid.
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 204 if the update was successful.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <param name="item">The POST payload containing JSON data modeled after this database model.</param>
+    /// <example>
+    /// POST: api/ItemData/Update/{id}
+    /// </example>
     [ResponseType(typeof(void))]
     [HttpPost]
     public IHttpActionResult Update(int id, Item item) {
@@ -86,6 +129,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to delete an element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <example>
+    /// POST: api/ItemData/Delete/{id}
+    /// </example>
     [ResponseType(typeof(ItemDto))]
     [HttpPost]
     public IHttpActionResult Delete(int id) {
@@ -104,6 +158,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     /** ASSOCIATIVE ROUTES
      */
 
+    /// <summary>
+    /// Standard associative route to link a Item to an Cafe.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="item_id">The Item to link.</param>
+    /// <param name="cafe_id">The Cafe to link to.</param>
+    /// <example>
+    /// POST: api/ItemData/LinkToCafe/{item_id}/{cafe_id}
+    /// </example>
     [HttpPost]
     [Route("api/ItemData/LinkToCafe/{item_id}/{cafe_id}")]
     [ResponseType(typeof(void))]
@@ -131,6 +197,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to unlink a Item with an Cafe.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="item_id">The Item to link.</param>
+    /// <param name="cafe_id">The Cafe to link to.</param>
+    /// <example>
+    /// POST: api/ItemData/UnlinkToCafe/{item_id}/{cafe_id}
+    /// </example>
     [HttpPost]
     [Route("api/ItemData/UnlinkWithCafe/{item_id}/{cafe_id}")]
     [ResponseType(typeof(void))]
@@ -158,6 +236,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to view all the Cafes linked to the Item.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="id">The Item to link.</param>
+    /// <example>
+    /// POST: api/ItemData/GetLinkedCafes/{id}
+    /// </example>
     [HttpGet]
     [ResponseType(typeof(IEnumerable<CafeDto>))]
     public IHttpActionResult GetLinkedCafes(int id) {

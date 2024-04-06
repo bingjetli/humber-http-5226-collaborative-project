@@ -15,48 +15,19 @@ namespace humber_http_5226_collaborative_project.Controllers {
   public class CafeDataController : ApiController {
     private ApplicationDbContext db = new ApplicationDbContext();
 
+
+    /** BASIC CRUD ROUTES
+     */
+
     /// <summary>
-    /// Returns either all cafes in the system or cafes based on search key if applicable
+    /// Standard route to fetch a list of all the elements in this database table.
     /// </summary>
     /// <returns>
-    /// All cafes in the database with names containing the seach key.
+    /// A list of Cafes in the form CafeDto.
     /// </returns>
     /// <example>
-    /// GET: api/CafeData/ListCafes/creeds
+    /// GET: api/CafeData/ListAll
     /// </example>
-    [HttpGet]
-    [Route("api/CafeData/Search/{SearchKey?}")]
-    public IEnumerable<CafeDto> Search(string SearchKey = null) {
-      List<Cafe> Cafes = new List<Cafe>();
-
-      if (SearchKey == null) {
-        Cafes = db.Cafes.ToList();
-      }
-      else {
-        Cafes = db.Cafes.Where(c => c.Name.Contains(SearchKey)).ToList();
-      }
-
-
-      /** BASIC CRUD ROUTES
-       */
-
-      List<CafeDto> CafeDtos = new List<CafeDto>();
-      Cafes.ForEach(c => CafeDtos.Add(new CafeDto() {
-        CafeId = c.CafeId,
-        OverpassId = c.OverpassId,
-        Latitude = c.Latitude,
-        Longitude = c.Longitude,
-        Name = c.Name,
-        Address = c.Address,
-        Phone = c.Phone,
-        Description = c.Description,
-        Website = c.Website,
-      }));
-
-      return CafeDtos;
-    }
-
-
     [ResponseType(typeof(IEnumerable<CafeDto>))]
     [HttpGet]
     public IEnumerable<CafeDto> ListAll() {
@@ -64,6 +35,16 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to find an element by their id in this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the Cafe doesn't exist. HTTP 200 with the Cafe in CafeDto form otherwise.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <example>
+    /// GET: api/CafeData/FindById/{id}
+    /// </example>
     [ResponseType(typeof(CafeDto))]
     [HttpGet]
     public IHttpActionResult FindById(int id) {
@@ -77,6 +58,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to create a new element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 400 If the payload is invalid. HTTP 200 with the added element in Dto
+    /// form otherwise.
+    /// </returns>
+    /// <param name="cafe">The POST payload containing JSON data modeled after this database model.</param>
+    /// <example>
+    /// POST: api/CafeData/CreateNew
+    /// </example>
     [ResponseType(typeof(CafeDto))]
     [HttpPost]
     public IHttpActionResult CreateNew(Cafe cafe) {
@@ -92,6 +84,19 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
 
 
+    /// <summary>
+    /// Standard route to update an element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 400 if the POST payload is invalid, or the id is invalid.
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 204 if the update was successful.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <param name="cafe">The POST payload containing JSON data modeled after this database model.</param>
+    /// <example>
+    /// POST: api/CafeData/Update/{id}
+    /// </example>
     [ResponseType(typeof(void))]
     [HttpPost]
     public IHttpActionResult Update(int id, Cafe cafe) {
@@ -125,6 +130,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard route to delete an element inside this database table.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="id">The primary key of the element in this database.</param>
+    /// <example>
+    /// POST: api/CafeData/Delete/{id}
+    /// </example>
     [ResponseType(typeof(CafeDto))]
     [HttpPost]
     public IHttpActionResult Delete(int id) {
@@ -143,6 +159,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     /** ASSOCIATIVE ROUTES
      */
 
+    /// <summary>
+    /// Standard associative route to link a Cafe to an Item.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="cafe_id">The Cafe to link.</param>
+    /// <param name="item_id">The Item to link to.</param>
+    /// <example>
+    /// POST: api/CafeData/LinkToItem/{cafe_id}/{item_id}
+    /// </example>
     [HttpPost]
     [Route("api/CafeData/LinkToItem/{cafe_id}/{item_id}")]
     [ResponseType(typeof(void))]
@@ -170,6 +198,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to unlink a Cafe with an Item.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="cafe_id">The Cafe to link.</param>
+    /// <param name="item_id">The Item to link to.</param>
+    /// <example>
+    /// POST: api/CafeData/UnlinkToItem/{cafe_id}/{item_id}
+    /// </example>
     [HttpPost]
     [Route("api/CafeData/UnlinkWithItem/{cafe_id}/{item_id}")]
     [ResponseType(typeof(void))]
@@ -197,6 +237,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to view all the Items linked to the Cafe.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="id">The Cafe to link.</param>
+    /// <example>
+    /// POST: api/CafeData/GetLinkedItems/{id}
+    /// </example>
     [HttpGet]
     [ResponseType(typeof(IEnumerable<ItemDto>))]
     public IHttpActionResult GetLinkedItems(int id) {
@@ -212,7 +263,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
-
+    /// <summary>
+    /// Standard associative route to link a Cafe to an Order.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="cafe_id">The Cafe to link.</param>
+    /// <param name="order_id">The Order to link to.</param>
+    /// <example>
+    /// POST: api/CafeData/LinkToOrder/{cafe_id}/{order_id}
+    /// </example>
     [HttpPost]
     [Route("api/CafeData/LinkToOrder/{cafe_id}/{order_id}")]
     [ResponseType(typeof(void))]
@@ -249,6 +311,18 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to unlink a Cafe with an Order.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="cafe_id">The Cafe to link.</param>
+    /// <param name="order_id">The Order to link to.</param>
+    /// <example>
+    /// POST: api/CafeData/UnlinkToOrder/{cafe_id}/{order_id}
+    /// </example>
     [HttpPost]
     [Route("api/CafeData/UnlinkWithOrder/{cafe_id}/{order_id}")]
     [ResponseType(typeof(void))]
@@ -276,6 +350,17 @@ namespace humber_http_5226_collaborative_project.Controllers {
     }
 
 
+    /// <summary>
+    /// Standard associative route to view all the Orders linked to the Cafe.
+    /// </summary>
+    /// <returns>
+    /// HTTP 404 if the id doesn't exist.
+    /// HTTP 200 if the delete was successful.
+    /// </returns>
+    /// <param name="id">The Cafe to link.</param>
+    /// <example>
+    /// POST: api/CafeData/GetLinkedOrders/{id}
+    /// </example>
     [HttpGet]
     [ResponseType(typeof(IEnumerable<OrderDto>))]
     public IHttpActionResult GetLinkedOrders(int id) {
@@ -293,6 +378,46 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
     /** LEGACY ROUTES
      */
+
+    /// <summary>
+    /// Returns either all cafes in the system or cafes based on search key if applicable
+    /// </summary>
+    /// <returns>
+    /// All cafes in the database with names containing the seach key.
+    /// </returns>
+    /// <example>
+    /// GET: api/CafeData/ListCafes/creeds
+    /// </example>
+    [HttpGet]
+    [Route("api/CafeData/Search/{SearchKey?}")]
+    public IEnumerable<CafeDto> Search(string SearchKey = null) {
+      List<Cafe> Cafes = new List<Cafe>();
+
+      if (SearchKey == null) {
+        Cafes = db.Cafes.ToList();
+      }
+      else {
+        Cafes = db.Cafes.Where(c => c.Name.Contains(SearchKey)).ToList();
+      }
+
+
+
+      List<CafeDto> CafeDtos = new List<CafeDto>();
+      Cafes.ForEach(c => CafeDtos.Add(new CafeDto() {
+        CafeId = c.CafeId,
+        OverpassId = c.OverpassId,
+        Latitude = c.Latitude,
+        Longitude = c.Longitude,
+        Name = c.Name,
+        Address = c.Address,
+        Phone = c.Phone,
+        Description = c.Description,
+        Website = c.Website,
+      }));
+
+      return CafeDtos;
+    }
+
 
     /// <summary>
     /// Gathers information about a cafe related to a particular order ID -------> Change to list all orders for cafe
