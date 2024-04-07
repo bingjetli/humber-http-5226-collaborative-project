@@ -18,18 +18,20 @@ namespace humber_http_5226_collaborative_project.Controllers
         static OrderController()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:44321/api/");
+            client.BaseAddress = new Uri("https://localhost:44328/api/orderdata/");
         }
 
+        /**   BASIC CRUD   */
+
         // GET: Order/List
-        public ActionResult List(string SearchKey = null)
+        public ActionResult List()
         {
             //objective: communicate with our order data api to retrieve a list of orders
-            //curl https://localhost:44321/api/orderdata/listorders
+            //curl https://localhost:44321/api/orderdata/listall
 
             //DetailsOrder ViewModel = new DetailsOrder();
 
-            string url = "orderdata/listorders/" + SearchKey;
+            string url = "listall";
             HttpResponseMessage response = client.GetAsync(url).Result;
 
             IEnumerable<OrderDto> Orders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
@@ -42,25 +44,27 @@ namespace humber_http_5226_collaborative_project.Controllers
         public ActionResult Details(int id)
         {
             //objective: communicate with our order data api to retrieve one order
-            //curl https://localhost:44321/api/orderdata/findorders/{id}
+            //curl https://localhost:44328/api/orderdata/findbyid/{id}
 
-            DetailsOrder ViewModel = new DetailsOrder();
+            //DetailsOrder ViewModel = new DetailsOrder();
 
-            string url = "orderdata/findorder/" + id;
+            string url = "findbyid/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
 
             OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
 
-            ViewModel.SelectedOrder = SelectedOrder;
+            //ViewModel.SelectedOrder = SelectedOrder;
 
-            url = "cafedata/ListCafesForOrder/" + id;
-            response = client.GetAsync(url).Result;
-            IEnumerable<CafeDto> RelatedCafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
+            //url = "cafedata/ListCafesForOrder/" + id;
+            //response = client.GetAsync(url).Result;
+            //IEnumerable<CafeDto> RelatedCafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
 
-            ViewModel.RelatedCafes = RelatedCafes;
+            //ViewModel.RelatedCafes = RelatedCafes;
 
 
-            return View(ViewModel);
+            //return View(ViewModel);
+
+            return View(SelectedOrder);
         }
 
         public ActionResult Error()
@@ -80,8 +84,8 @@ namespace humber_http_5226_collaborative_project.Controllers
         public ActionResult Create(Order Order)
         {
             //objective: add a new order into our system using the API
-            //curl -H "Content-Type:application/json" -d @Order.json https://localhost:44324/api/orderdata/addOrder 
-            string url = "orderdata/addorder";
+            //curl -H "Content-Type:application/json" -d @Order.json https://localhost:44328/api/orderdata/createnew 
+            string url = "createnew";
 
 
             string jsonpayload = jss.Serialize(Order);
@@ -103,7 +107,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         // POST: Order/Edit/5
         public ActionResult Edit(int id)
         {
-            string url = "orderdata/findorder/" + id;
+            string url = "findbyid/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
             return View(SelectedOrder);
@@ -114,7 +118,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         public ActionResult Update(int id, Order Order)
         {
 
-            string url = "orderdata/updateorder/" + id;
+            string url = "update/" + id;
             string jsonpayload = jss.Serialize(Order);
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
@@ -132,7 +136,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         // GET: Order/Delete/5
         public ActionResult DeleteConfirm(int id)
         {
-            string url = "orderdata/findorder/" + id;
+            string url = "findbyid/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
             return View(SelectedOrder);
@@ -142,7 +146,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            string url = "orderdata/deleteorder/" + id;
+            string url = "delete/" + id;
             HttpContent content = new StringContent("");
             content.Headers.ContentType.MediaType = "application/json";
             HttpResponseMessage response = client.PostAsync(url, content).Result;
