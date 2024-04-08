@@ -49,6 +49,6 @@ To set up the project locally, follow these steps:
 4. Use Entity Framework Migrations to set up your database schema.
 
 ## Contributions
-Bailey: Setup project repository, models, associations, initial migrations, standardized WebAPI routes
-Khushi:
-Sarah:
+- Bailey: Setup project repository, models, associations, initial migrations, standardized WebAPI routes
+- Khushi:
+- Sarah:
