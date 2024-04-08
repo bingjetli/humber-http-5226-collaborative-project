@@ -38,7 +38,7 @@ Our platform supports comprehensive Create, Read, Update, and Delete (CRUD) oper
 - **Delete**: Revoke a courier's license.
 
 ### Additional Features
-- **Search Functionality**: A search bar allows users to narrow down their cafe search, making it easier to find exactly what they're looking for.
+- **Search Functionality**: A search bar allows users to narrow down their cafe search, making it easier to find exactly what they're looking for. (coming soon)
 
 ## Getting Started
 To set up the project locally, follow these steps:
@@ -47,3 +47,8 @@ To set up the project locally, follow these steps:
 2. Ensure you have ASP.NET C# and the Entity Framework installed.
 3. Navigate to the project directory and run the application using your preferred IDE.
 4. Use Entity Framework Migrations to set up your database schema.
+
+## Contributions
+Bailey: Setup project repository, models, associations, initial migrations, standardized WebAPI routes
+Khushi:
+Sarah:
