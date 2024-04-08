@@ -238,7 +238,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
 
-        //Get:Cafe/UnlinkWithItem/{id}?ItemId={itemId}
+        //Get:Cafe/UnlinkWithItem/{id}?ItemId={ItemId}
         [HttpGet]
         public ActionResult UnlinkWithItem(int id, int ItemId)
         {
