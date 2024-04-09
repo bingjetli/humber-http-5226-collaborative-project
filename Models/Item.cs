@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace humber_http_5226_collaborative_project.Models {
+namespace humber_http_5226_collaborative_project.Models
+{
     public class Item
     {
 
@@ -21,10 +22,22 @@ namespace humber_http_5226_collaborative_project.Models {
         public double Price { get; set; }
         public virtual ICollection<Cafe> CafesWithThisItem { get; set; }
 
+
+        public ItemDto ToDto()
+        {
+            return new ItemDto
+            {
+                ItemId = ItemId,
+                Name = Name,
+                Description = Description,
+                Price = Price,
+            };
+        }
+
     }
 
-        //ItemDto -Sarah
-        public class ItemDto
+    //ItemDto -Sarah
+    public class ItemDto
         {
             public int ItemId { get; set; }
             public string Name { get; set; }

@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace humber_http_5226_collaborative_project.Models {
+namespace humber_http_5226_collaborative_project.Models
+{
     public class CourierLicense
     {
 
@@ -33,13 +34,26 @@ namespace humber_http_5226_collaborative_project.Models {
 
         public virtual ICollection<Order> AssignedOrders { get; set; }
 
-        //TODO: Fix this relationship at some point...
+        //BL->TODO: Fix this relationship at some point...
         public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
+
+
+        public CourierLicenseDto ToDto()
+        {
+            return new CourierLicenseDto
+            {
+                CourierLicenseId = CourierLicenseId,
+                VehicleType = VehicleType,
+                IsValid = IsValid,
+                IsAvailable = IsAvailable,
+                IssueDate = IssueDate
+            };
+        }
     }
 
-        //CourierLicenseDto -Sarah
-        //ApplicationUser?
-        public class CourierLicenseDto
+    //CourierLicenseDto -Sarah
+    //ApplicationUser?
+    public class CourierLicenseDto
         {
             public int CourierLicenseId { get; set; }
             public string VehicleType { get; set; }
