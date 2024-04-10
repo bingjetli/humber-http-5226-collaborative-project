@@ -1,4 +1,4 @@
-﻿@model humber_http_5226_collaborative_project.Models.CafeDto
+﻿@model humber_http_5226_collaborative_project.Models.ViewModels.DetailsCafe
 
 @{
     ViewBag.Title = "Details";
@@ -10,35 +10,35 @@
 <a href="/Cafe/List">Back to List</a>
 
 <!--Cafe information for selected cafe-->
-<h3>@Model.Name</h3>
-<div>@Model.Address</div>
-<div>@Model.OverpassId</div>
-<div>@Model.Latitude</div>
-<div>@Model.Longitude</div>
-<div>@Model.Phone</div>
-<div>@Model.Description</div>
-<div>@Model.Website</div>
+<h3>@Model.cafe.Name</h3>
+<div>@Model.cafe.Address</div>
+<div>@Model.cafe.OverpassId</div>
+<div>@Model.cafe.Latitude</div>
+<div>@Model.cafe.Longitude</div>
+<div>@Model.cafe.Phone</div>
+<div>@Model.cafe.Description</div>
+<div>@Model.cafe.Website</div>
 
 <!--Cafe menu for selected cafe-->
 <h3>Menu</h3>
-@if (Model.Menu != null && Model.Menu.Any())
+@if (Model.cafe != null && Model.cafe.Any())
 {
     <ul>
-        @foreach (var item in Model.Menu)
+        @foreach (var item in Model.AvailableItems)
         {
             <li>
                 <strong>@item.Name</strong> - @item.Description - $@item.Price
                 <!--Option to remove item from menu-->
-                <a href="/Cafe/UnlinkWithItem/@Model.CafeId?ItemId=@item.ItemId">[x]</a>
+                <a href="/Cafe/UnlinkWithItem/@Model.cafe.CafeId?ItemId=@item.ItemId">[x]</a>
             </li>
         }
     </ul>
 
     <!--Dropdown to add item to menu-->
-    <h4>Add New Menu Item to @Model.Name</h4>
-    <form method="POST" action="/Cafe/LinkToItem/@Model.CafeId">
+    <h4>Add New Menu Item to @Model.cafe.Name</h4>
+    <form method="POST" action="/Cafe/LinkToItem/@Model.cafe.CafeId">
         <select name="ItemId">
-            @foreach (var item in Model.Menu)
+            @foreach (var item in Model.UnavailableItems)
             {
                 <option value="@item.ItemId">@item.Name</option>
             }
@@ -55,7 +55,7 @@ else
 
 <!--Order history for selected cafe-->
 <h3>Order History</h3>
-@if (Model.Orders != null && Model.Orders.Any())
+@if (Model.AvailableOrders != null && Model.AvailableOrders.Any())
 {
     <table>
         <thead>
@@ -68,21 +68,21 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var order in Model.Orders)
+            @foreach (var order in Model.AvailableOrders)
             {
                 <tr>
                     <td>@order.OrderId</td>
-                    <td>@Model.Name</td>
+                    <td>@Model.cafe.Name</td>
                     <td>@order.CreatedAt.ToString("g")</td> <!--  ToString("g") method formats the CreatedAt datetime in a general, short format for readability -->
                     <td>
-                        @foreach (var item in order.OrderItems)
+                        @foreach (var item in Model.OrderItems)
                         {
                             <p>@item.Item.Name - Quantity: @item.Quantity</p>
                         }
                     </td>
                     <td>
                         <!--Option to remove order from order history-->
-                        <a href="/Cafe/UnlinkWithOrder/@Model.CafeId?OrderId=@order.OrderId">[x]</a>
+                        <a href="/Cafe/UnlinkWithOrder/@Model.cafe.CafeId?OrderId=@order.OrderId">[x]</a>
                     </td>
                 </tr>
             }

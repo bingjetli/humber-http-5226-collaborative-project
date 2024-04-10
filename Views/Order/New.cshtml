@@ -8,15 +8,15 @@
 
 <form action="/Order/Create" method="POST">
     <div>
-        <!--Dropdown for cafe selection-->
+        <!--Dropdown for cafe selection
         <label for="CafeId">Cafe:</label>
         <select id="CafeId" name="CafeId">
-            @foreach (var cafe in ViewBag.Cafes as IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>)
+           <!-- @foreach (var cafe in Model)
             {
                 <option value="@cafe.CafeId">@cafe.Name</option>
             }
         </select>
-    </div>
+    </div>-->
 
     <!--Order date-->
     <div>
@@ -35,7 +35,7 @@
         <label for="CourierLicenseId">Courier (Optional):</label>
         <select id="CourierLicenseId" name="CourierLicenseId">
             <option value="">Select a Courier</option>
-            @foreach (var courier in ViewBag.Couriers as IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicense>)
+            @foreach (var courier in Model)
             {
                 <option value="@courier.CourierLicenseId">@courier.CourierLicenseId</option>
             }

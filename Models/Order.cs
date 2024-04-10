@@ -49,6 +49,7 @@ namespace humber_http_5226_collaborative_project.Models {
     public DateTime CreatedAt { get; set; }
 
     public int? CafeId { get; set; }
+    public  string Name { get; set; }
     public int? CourierLicenseId { get; set; }
     public string Status { get; set; }
 

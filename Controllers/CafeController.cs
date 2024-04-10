@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using static humber_http_5226_collaborative_project.Models.Cafe;
+using humber_http_5226_collaborative_project.Migrations;
 using System.Web.Script.Serialization;
 using System.Security.Cryptography.X509Certificates;
 
@@ -46,6 +47,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         // GET: Cafe/Details/5
         public ActionResult Details(int id)
         {
+            DetailsCafe ViewModel = new DetailsCafe();
 
             //objective: communicate with our cafe data api to retrieve one cafe
             //curl https://localhost:44328/api/cafedata/findbyid/{id}
@@ -57,12 +59,13 @@ namespace humber_http_5226_collaborative_project.Controllers
            // Debug.WriteLine("The response code is ");
            //Debug.WriteLine(response.StatusCode);
 
-            CafeDto SelectedCafe = response.Content.ReadAsAsync<CafeDto>().Result;
-
-            //ViewModel.SelectedCafe = SelectedCafe;
+            CafeDto cafe = response.Content.ReadAsAsync<CafeDto>().Result;
+            ViewModel.cafe = cafe;
 
             //Debug.WriteLine("The cafe recieved is: " + SelectedCafe.CafeId);
             //Debug.WriteLine(SelectedCafe.Name);
+
+            //ITEMS
 
             //show AVAILABLE items at this cafe
             url = "itemdata/listavailablecafeitems/" + id;
@@ -70,7 +73,7 @@ namespace humber_http_5226_collaborative_project.Controllers
             response = client.GetAsync(url).Result;
 
             IEnumerable<ItemDto> AvailableItems = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
-            //ViewModel.AvailableItems = AvailableItems;
+            ViewModel.AvailableItems = AvailableItems;
 
             //show UNAVAILABLE items at this cafe
             url = "itemdata/listunavailablecafeitems/" + id;
@@ -78,10 +81,28 @@ namespace humber_http_5226_collaborative_project.Controllers
             response = client.GetAsync(url).Result;
 
             IEnumerable<ItemDto> UnavailableItems = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
-            //ViewModel.UnavailableItems = UnavailableItems;
+            ViewModel.UnavailableItems = UnavailableItems;
 
-            //return View(ViewModel);
-            return View(SelectedCafe);
+            //ORDERS
+            //show AVAILABLE orders for this cafe
+            url = "itemdata/listavailablecafeorders/" + id;
+
+            response = client.GetAsync(url).Result;
+
+            IEnumerable<OrderDto> AvailableOrders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
+            ViewModel.AvailableOrders = AvailableOrders;
+
+            //show UNAVAILABLE orders for this cafe
+            url = "itemdata/listunavailablecafeorders/" + id;
+
+            response = client.GetAsync(url).Result;
+
+            IEnumerable<OrderDto> UnavailableOrders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
+            ViewModel.UnavailableOrders = UnavailableOrders;
+
+
+            return View(ViewModel);
+            //return View(SelectedCafe);
 
         }
 
