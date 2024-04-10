@@ -18,17 +18,9 @@
 <!-- Loop displaying list of cafes-->
 @foreach (var Cafe in Model)
 {
-    <!--<div>
+    <div>
         <h3><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.Name</a></h3>
         <p>@Cafe.Address</p>
-    </div>-->
-
-    <div>
-        <h3>@Cafe.Name</h3>
-        <p>@Cafe.Address</p>
-        <button><a href="/Cafe/Details/@Cafe.CafeId">DETAILS</a></button>
-        <button><a href="/Cafe/Details/@Cafe.CafeId">MENU</a></button>
-        <button><a href="/Cafe/Details/@Cafe.CafeId">ORDER HISTORY</a></button>
     </div>
 
 }
