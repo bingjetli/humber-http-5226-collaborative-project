@@ -22,8 +22,8 @@ namespace humber_http_5226_collaborative_project.Controllers
 
         /**   BASIC CRUD   */
 
-        // GET: CourierLicense
-        public ActionResult Index()
+        // GET: CourierLicense/List
+        public ActionResult List()
         {
             //objective: communicate with our courier license data api to retrieve a list of courier licenses
             //curl https://localhost:44328/api/courierlicensedata/listall
@@ -36,6 +36,7 @@ namespace humber_http_5226_collaborative_project.Controllers
             //returns Views/CourierLicense/List.cshtml
             return View(CourierLicenses);
         }
+
 
         // GET: CourierLicense/Details/5
         public ActionResult Details(int id)
@@ -87,8 +88,8 @@ namespace humber_http_5226_collaborative_project.Controllers
             }
         }
 
-        // GET: CourierLicense/Edit/5
-        public ActionResult Edit(int id)
+            // GET: CourierLicense/Edit/5
+            public ActionResult Edit(int id)
         {
             string url = "findbyid/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;

@@ -9,5 +9,8 @@ namespace humber_http_5226_collaborative_project.Models.ViewModels {
     public IEnumerable<OrderDto> AvailableOrders { get; set; }
 
     public IEnumerable<OrderDto> CurrentOrders { get; set; }
-  }
+
+    public IEnumerable<ItemDto> AvailableItems { get; set; }
+    public IEnumerable<ItemDto> UnavailableItems { get; set; }
+    }
 }
