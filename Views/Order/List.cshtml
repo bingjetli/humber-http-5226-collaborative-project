@@ -5,21 +5,16 @@
 }
 
 <h2>Browse Orders</h2>
+
+<!--Button to create a new order-->
 <a href="/Order/New">New Order</a>
 
-<form action="/Order/List" method="GET">
-    <div>
-        <input type="text" name="SearchKey" />
-        <input type="submit" value="Search" />
-    </div>
-</form>
-
-@foreach (var Order in Model)
+<!--List of orders-->
+@foreach (var order in Model)
 {
     <div>
-        <h2>
-            <a href="/Order/Details/@Order.OrderId">@Order.CreatedAt</a>
-        </h2>
+        <h3><a href="/Order/Details/@order.OrderId">@order.OrderId</a></h3>
+        <p>@order.CreatedAt</p>
     </div>
 }
 

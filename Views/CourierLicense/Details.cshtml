@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<h2>Courier License Details</h2>
+<a href="/CourierLicenses">Back to List</a>
+
+<div>
+    <h3>License Number: @Model.CourierLicenseId</h3>
+    <p>Vehicle Type: @Model.VehicleType</p>
+    <p>Is Valid: @(Model.IsValid ? "Yes" : "No")</p>
+    <p>Is Available: @(Model.IsAvailable ? "Yes" : "No")</p>
+    <p>Issue Date: @Model.IssueDate.ToString("yyyy-MM-dd")</p>
+</div>
+
+<div>
+    <a href="/CourierLicenses/Edit/@Model.CourierLicenseId">Edit</a> |
+    <a href="/CourierLicenses/Delete/@Model.CourierLicenseId">Delete</a>
+</div>
+

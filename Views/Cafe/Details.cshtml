@@ -1,4 +1,4 @@
-﻿@model humber_http_5226_collaborative_project.Models.ViewModels.DetailsCafe
+﻿@model humber_http_5226_collaborative_project.Models.CafeDto
 
 @{
     ViewBag.Title = "Details";
@@ -6,49 +6,111 @@
 
 <h2>Details</h2>
 
-<a href="/Cafe/List" class="back-link">Back to List</a>
+<!--Back to list button-->
+<a href="/Cafe/List">Back to List</a>
 
-        <h1>@Model.SelectedCafe.CafeName</h1>
-        <div>@Model.SelectedCafe.DistrictName</div>
-        <div>@Model.SelectedCafe.CafeAddress</div>
-        <div>@Model.SelectedCafe.CafeOverpassId</div>
-        <div>@Model.SelectedCafe.CafeLatitude</div>
-        <div>@Model.SelectedCafe.CafeLongitude</div>
-        <div>@Model.SelectedCafe.CafePhone</div>
-        <div>@Model.SelectedCafe.CafeDescription</div>
-        <div>@Model.SelectedCafe.CafeWebsite</div>
-<div>
-    <h1>@Model.SelectedCafe.Name</h1>
-    <div>@Model.SelectedCafe.Address</div>
-    <div>@Model.SelectedCafe.Phone</div>
-    <div>@Model.SelectedCafe.Description</div>
-    <div>@Model.SelectedCafe.Website</div>
-    <div>
-        <a href="/Cafe/Edit/@Model.SelectedCafe.CafeId">Update</a>
-        <a href="/Cafe/DeleteConfirm/@Model.SelectedCafe.CafeId">Delete</a>
-    </div>
+<!--Cafe information for selected cafe-->
+<h3>@Model.Name</h3>
+<div>@Model.Address</div>
+<div>@Model.OverpassId</div>
+<div>@Model.Latitude</div>
+<div>@Model.Longitude</div>
+<div>@Model.Phone</div>
+<div>@Model.Description</div>
+<div>@Model.Website</div>
 
-<div>
-    <h2>Items in @Model.SelectedCafe.CafeName:</h2>
-    <ul class="item-list">
-        @foreach (var item in Model.AvailableItems)
+<!--Cafe menu for selected cafe-->
+<h3>Menu</h3>
+@if (Model.Menu != null && Model.Menu.Any())
+{
+    <ul>
+        @foreach (var item in Model.Menu)
         {
             <li>
-                <a href="/Item/Details/@item.ItemId">@item.ItemName</a>
-                <a href="/Cafe/Unassociate/@Model.SelectedCafe.CafeId?ItemId=@item.ItemId">[x]</a>
+                <strong>@item.Name</strong> - @item.Description - $@item.Price
+                <!--Option to remove item from menu-->
+                <a href="/Cafe/UnlinkWithItem/@Model.CafeId?ItemId=@item.ItemId">[x]</a>
             </li>
         }
     </ul>
-    <div>
-        <h4>Add new Item to @Model.SelectedCafe.CafeName</h4>
-        <form method="POST" action="/Cafe/Associate/@Model.SelectedCafe.CafeId">
-            <select name="ItemId">
-                @foreach (var item in Model.CurrentItems)
-                {
-                    <option value="@item.ItemId">@item.ItemName</option>
-                }
-            </select>
-            <input type="submit" value="Add Item" />
-        </form>
-    </div>
+
+    <!--Dropdown to add item to menu-->
+    <h4>Add New Menu Item to @Model.Name</h4>
+    <form method="POST" action="/Cafe/LinkToItem/@Model.CafeId">
+        <select name="ItemId">
+            @foreach (var item in Model.Menu)
+            {
+                <option value="@item.ItemId">@item.Name</option>
+            }
+        </select>
+        <input type="submit" value="Add Item" />
+    </form>
+    <!-- NOTE: Add 'SelectedCafe' for values-->
+    <!-- NOTE: Update 'CurrentItems' in Cafe Controller-->
+}
+else
+{
+    <div>No menu items available.</div>
+}
+
+<!--Order history for selected cafe-->
+<h3>Order History</h3>
+@if (Model.Orders != null && Model.Orders.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Cafe</th>
+                <th>Created At</th>
+                <th>Details</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@Model.Name</td>
+                    <td>@order.CreatedAt.ToString("g")</td> <!--  ToString("g") method formats the CreatedAt datetime in a general, short format for readability -->
+                    <td>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <p>@item.Item.Name - Quantity: @item.Quantity</p>
+                        }
+                    </td>
+                    <td>
+                        <!--Option to remove order from order history-->
+                        <a href="/Cafe/UnlinkWithOrder/@Model.CafeId?OrderId=@order.OrderId">[x]</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!--Add an order to a cafe's order history-->
+    <h4>Add New Order to @Model.Name</h4>
+    <form method="POST" action="/Cafe/LinkToOrder/@Model.CafeId">
+        <select name="OrderId">
+            @foreach (var order in Model.Orders)
+            {
+                <option value="@order.OrderId">@order.OrderId</option>
+            }
+        </select>
+        <input type="submit" value="Add Order" />
+    </form>
+    <!-- NOTE: Add 'SelectedCafe' for values-->
+    <!--NOTE: Update 'CurrentOrders' in Cafe Controller-->
+    <!-- NOTE: Simplify order linking with server-side rendering (or AJAX) -->
+}
+else
+{
+    <div>No orders found.</div>
+}
+
+<!--Option to update or delete cafe-->
+<div>
+    <a href="/Cafe/Edit/@Model.CafeId">Update</a>
+    <a href="/Cafe/DeleteConfirm/@Model.CafeId">Delete</a>
 </div>

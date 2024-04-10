@@ -11,7 +11,16 @@
         <input type="text" name="ItemId" value="@Model.ItemId" />
     </div>
     <div>
-        <label>Item:</label> <input type="text" name="ItemName" value="@Model.ItemName" />
+        <label>Name:</label> 
+        <input type="text" id="ItemName" name="ItemName" value="@Model.Name" />
+    </div>
+    <div>
+        <label>Description:</label> 
+        <input type="text" id="ItemDescription" name="ItemDescription" value="@Model.Description" />
+    </div>
+    <div>
+        <label>Price:</label> 
+        <input type="text" id="ItemPrice" name="ItemPrice" value="@Model.Price" />
     </div>
     <div>
         <input type="submit" value="Update Item" />

@@ -1,16 +1,49 @@
-﻿
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderDto>
+
 @{
     ViewBag.Title = "New";
 }
 
 <h2>Create Order</h2>
+
 <form action="/Order/Create" method="POST">
     <div>
-        <label>Name:</label> <input type="text" name="OrderName" />
+        <!--Dropdown for cafe selection-->
+        <label for="CafeId">Cafe:</label>
+        <select id="CafeId" name="CafeId">
+            @foreach (var cafe in ViewBag.Cafes as IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>)
+            {
+                <option value="@cafe.CafeId">@cafe.Name</option>
+            }
+        </select>
     </div>
+
+    <!--Order date-->
+    <div>
+        <label for="CreatedAt">Order Date:</label>
+        <input type="date" id="CreatedAt" name="CreatedAt" />
+    </div>
+
+    <!--Order status-->
+    <div>
+        <label for="Status">Status:</label>
+        <input type="text" id="Status" name="Status" />
+    </div>
+
+    <!--Courier selection-->
+    <div>
+        <label for="CourierLicenseId">Courier (Optional):</label>
+        <select id="CourierLicenseId" name="CourierLicenseId">
+            <option value="">Select a Courier</option>
+            @foreach (var courier in ViewBag.Couriers as IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicense>)
+            {
+                <option value="@courier.CourierLicenseId">@courier.CourierLicenseId</option>
+            }
+        </select>
+    </div>
+
     <div>
         <input type="submit" value="Create Order" />
-
     </div>
 </form>
 

@@ -1,21 +1,27 @@
-﻿@model humber_http_5226_collaborative_project.Models.ViewModels.DetailsItem
+﻿@model humber_http_5226_collaborative_project.Models.ItemDto
 
 @{
     ViewBag.Title = "Details";
 }
 
 <a href="/Item/List">Go back to list</a>
-<a href="/Item/Edit/@Model.SelectedItem.ItemId">Update</a>
-<a href="/Item/DeleteConfirm/@Model.SelectedItem.ItemId">Delete</a>
-<h2>@Model.SelectedItem.ItemName</h2>
 
-<div>
-    <h3>Available In:</h3>
-    <div>
-        @foreach (var cafe in Model.RelevantCafes)
-        {
-            <a href="/Cafe/Details/@cafe.CafeId">@cafe.CafeName</a><br />
-        }
-    </div>
-</div>
+<h1>@Model.Name</h1>
+<div>@Model.Description</div>
+<div>@Model.Price</div>
+<a href="~/Views/Item/Details.cshtml">~/Views/Item/Details.cshtml</a>
+<h2>Available at: </h2>
+<ul>
+    @foreach (var cafe in Model.CafesWithThisItem)
+    {
+        <li>
+            <h3><a href="/Cafe/Details/@cafe.CafeId">@cafe.Name</a></h3>
+        </li>
+    }
+</ul>
+
+<a href="/Item/Edit/@Model.ItemId">Update</a>
+<a href="/Item/DeleteConfirm/@Model.ItemId">Delete</a>
+<h2>@Model.Name</h2>
+
 

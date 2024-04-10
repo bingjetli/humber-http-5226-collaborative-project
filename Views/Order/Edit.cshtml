@@ -1,21 +1,50 @@
-﻿@model humber_http_5226_collaborative_project.OrderDto
+﻿@model humber_http_5226_collaborative_project.Models.OrderDto
 
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Update Order</h2>
-<form action="/Order/Update/@Model.OrderId" method="POST">
+
+<form action="/Order/Edit/@Model.OrderId" method="POST">
+
     <div>
-        @* Pass through the Order ID *@
-        <input type="text" name="OrderId" value="@Model.OrderId" />
+        <!--Cafe selection-->
+        <label for="CafeId">Cafe:</label>
+        <select id="CafeId" name="CafeId">
+            @foreach (var cafe in ViewBag.Cafes as IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>)
+            {
+                <option value="@cafe.CafeId" @(Model.CafeId == cafe.CafeId ? "selected" : "")>@cafe.Name</option>
+            }
+        </select>
     </div>
+
+    <!--Order date-->
     <div>
-        <label>Name:</label> <input type="text" name="OrderName" value="@Model.OrderName" />
+        <label for="CreatedAt">Order Date:</label>
+        <input type="date" id="CreatedAt" name="CreatedAt" value="@Model.CreatedAt.ToString("yyyy-MM-dd")" />
     </div>
+
+    <!--Status-->
+    <div>
+        <label for="Status">Status:</label>
+        <input type="text" id="Status" name="Status" value="@Model.Status" />
+    </div>
+
+    <!--Courier Selection-->
+    <div>
+        <label for="CourierLicenseId">Courier (Optional):</label>
+        <select id="CourierLicenseId" name="CourierLicenseId">
+            <option value="">Select a Courier</option>
+            @foreach (var courier in ViewBag.Couriers as IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicense>)
+            {
+                <option value="@courier.CourierLicenseId" @(Model.CourierLicenseId == courier.CourierLicenseId ? "selected" : "")>@courier.CourierLicenseId</option>
+            }
+        </select>
+    </div>
+
     <div>
         <input type="submit" value="Update Order" />
-
     </div>
 </form>
 

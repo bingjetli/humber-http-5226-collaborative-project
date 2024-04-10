@@ -9,8 +9,9 @@
 
 @foreach (var item in Model)
 {
-    <div class="item-item">
-        <h2 class="item-name"><a href="/Item/Details/@item.ItemId">@item.Name</a></h2>
+    <div>
+        <h3><a href="/Item/Details/@item.ItemId">@item.Name</a></h3>
+        <p>@item.Price</p>
     </div>
 }
 
