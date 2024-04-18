@@ -1,26 +1,44 @@
-﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.ItemDto>
+﻿@model humber_http_5226_collaborative_project.Models.ItemDto
 
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "Add New Item";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Create Item</h2>
+<h2>@ViewBag.Title</h2>
 
-<form action="/Item/Create" method="POST">
-    <div>
-        <label>Name:</label> 
-        <input type="text" id="ItemName" name="ItemName" />
+@using (Html.BeginForm("Create", "Item", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <label>Description:</label> 
-        <input type="text" id="ItemDescription" name="ItemDescription" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <label>Price:</label> 
-        <input type="text" id="ItemPrice" name="ItemPrice" />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.01" } })
+            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <input type="submit" value="Create Item" />
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
     </div>
-</form>
+}
+
 

@@ -1,53 +1,33 @@
 ﻿@model humber_http_5226_collaborative_project.Models.OrderDto
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Order Details";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
+<h2>@ViewBag.Title</h2>
 
+<div class="details-panel">
+    <dl class="dl-horizontal">
+        <dt>Order ID</dt>
+        <dd>@Html.DisplayFor(model => model.OrderId)</dd>
 
-<h2>Order Details</h2>
+        <dt>Cafe</dt>
+        <dd>@Html.DisplayFor(model => model.Cafe.Name)</dd>
 
-<!--Back to list button-->
-<a href="/Order/List">Back to List</a>
+        <dt>Courier License ID</dt>
+        <dd>@Html.DisplayFor(model => model.CourierLicenseId)</dd>
 
+        <dt>Status</dt>
+        <dd>@Html.DisplayFor(model => model.Status)</dd>
 
-<div>
-    <h3>Order ID: @Model.OrderId</h3>
-    <p>Date Created: @Model.CreatedAt.ToString("g")</p>
-    <p>Status: @Model.Status</p>
-    <p>Cafe: @Model.Cafe.Name</p>
-    <p>Courier License ID: @(Model.CourierLicenseId.HasValue ? Model.CourierLicenseId.ToString() : "Not Assigned")</p>
+        <dt>Created At</dt>
+        <dd>@Html.DisplayFor(model => model.CreatedAt, "{0:yyyy-MM-dd}")</dd>
+    </dl>
 
-    <h4>Order Items</h4>
-    @if (Model.OrderItems != null && Model.OrderItems.Any())
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.OrderItems)
-                {
-                    <tr>
-                        <td>@item.Item.Name</td>
-                        <td>@item.Quantity</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No items found for this order.</p>
-    }
-</div>
-
-<div>
-    <a href="/Order/Edit/@Model.OrderId">Edit Order</a> |
-    <a href="/Order/DeleteConfirm/@Model.OrderId">Delete Order</a>
+    <div class="buttons">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Delete", "DeleteConfirm", new { id = Model.OrderId }, new { @class = "btn btn-danger" })
+    </div>
 </div>
 

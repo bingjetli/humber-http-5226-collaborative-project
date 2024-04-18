@@ -1,0 +1,30 @@
+﻿@model humber_http_5226_collaborative_project.Models.OrderItemDto
+
+@{
+    ViewBag.Title = "Order Item Details";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="details-panel">
+    <dl class="dl-horizontal">
+        <dt>Order Item ID</dt>
+        <dd>@Html.DisplayFor(model => model.OrderItemId)</dd>
+
+        <dt>Item Name</dt>
+        <dd>@Html.DisplayFor(model => model.Item.Name)</dd>
+
+        <dt>Quantity</dt>
+        <dd>@Html.DisplayFor(model => model.Quantity)</dd>
+
+        <dt>Order ID</dt>
+        <dd>@Html.DisplayFor(model => model.OrderId)</dd>
+    </dl>
+
+    <div class="buttons">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.OrderItemId }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Delete", "DeleteConfirm", new { id = Model.OrderItemId }, new { @class = "btn btn-danger" })
+    </div>
+</div>
+

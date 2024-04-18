@@ -1,22 +1,31 @@
-﻿
+﻿@model humber_http_5226_collaborative_project.Models.CourierLicenseDto
+
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Courier License Details";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
+<h2>@ViewBag.Title</h2>
 
-<h2>Courier License Details</h2>
-<a href="/CourierLicenses">Back to List</a>
+<div class="details-panel">
+    <dl class="dl-horizontal">
+        <dt>Vehicle Type</dt>
+        <dd>@Html.DisplayFor(model => model.VehicleType)</dd>
 
-<div>
-    <h3>License Number: @Model.CourierLicenseId</h3>
-    <p>Vehicle Type: @Model.VehicleType</p>
-    <p>Is Valid: @(Model.IsValid ? "Yes" : "No")</p>
-    <p>Is Available: @(Model.IsAvailable ? "Yes" : "No")</p>
-    <p>Issue Date: @Model.IssueDate.ToString("yyyy-MM-dd")</p>
+        <dt>Valid</dt>
+        <dd>@Html.DisplayFor(model => model.IsValid)</dd>
+
+        <dt>Available</dt>
+        <dd>@Html.DisplayFor(model => model.IsAvailable)</dd>
+
+        <dt>Issue Date</dt>
+        <dd>@Html.DisplayFor(model => model.IssueDate, "{0:yyyy-MM-dd}")</dd>
+    </dl>
+
+    <div class="buttons">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CourierLicenseId }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Delete", "DeleteConfirm", new { id = Model.CourierLicenseId }, new { @class = "btn btn-danger" })
+    </div>
 </div>
 
-<div>
-    <a href="/CourierLicenses/Edit/@Model.CourierLicenseId">Edit</a> |
-    <a href="/CourierLicenses/Delete/@Model.CourierLicenseId">Delete</a>
-</div>
 

@@ -1,17 +1,38 @@
 ﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.ItemDto>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "List of Items";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Browse Items</h2>
-<a href="/Item/New">New Item</a>
+<h2>@ViewBag.Title</h2>
 
-@foreach (var item in Model)
-{
-    <div>
-        <h3><a href="/Item/Details/@item.ItemId">@item.Name</a></h3>
-        <p>@item.Price</p>
-    </div>
-}
+<p>
+    @Html.ActionLink("Create New Item", "New", "Item", new { }, new { @class = "btn btn-primary" })
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>$@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>
+                    @Html.ActionLink("View Details", "Details", new { id = item.ItemId }, new { @class = "btn btn-info btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 

@@ -52,7 +52,8 @@ namespace humber_http_5226_collaborative_project.Models {
     public  string Name { get; set; }
     public int? CourierLicenseId { get; set; }
     public string Status { get; set; }
+    public CafeDto Cafe { get; set; }
 
-    //public virtual ICollection<OrderItem> OrderItems { get; set; }
-  }
+        //public virtual ICollection<OrderItem> OrderItems { get; set; }
+    }
 }

@@ -1,0 +1,17 @@
+﻿@model humber_http_5226_collaborative_project.Models.OrderItemDto
+@{
+    ViewBag.Title = "DeleteConfirm";
+}
+
+<h2>Are you sure you want to delete this order item?</h2>
+
+<h3>Name: @Model.OrderItemId</h3>
+
+<form action="/Order/Delete/@Model.OrderItemId" method="POST">
+
+    <input type="submit" value="Confirm Delete" />
+
+</form>
+
+<a href="/OrderItem/List">Cancel</a>
+
