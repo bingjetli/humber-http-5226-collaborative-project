@@ -1,4 +1,5 @@
 ﻿using humber_http_5226_collaborative_project.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,39 +26,29 @@ namespace humber_http_5226_collaborative_project.Controllers
         // GET: CourierLicense/List
         public ActionResult List()
         {
-            //objective: communicate with our courier license data api to retrieve a list of courier licenses
-            //curl https://localhost:44328/api/courierlicensedata/listall
-
-            string url = "listall";
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            IEnumerable<CourierLicenseDto> CourierLicenses = response.Content.ReadAsAsync<IEnumerable<CourierLicenseDto>>().Result;
-
-            //returns Views/CourierLicense/List.cshtml
-            return View(CourierLicenses);
+            HttpResponseMessage response = client.GetAsync("listall").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var courierLicenses = response.Content.ReadAsAsync<IEnumerable<CourierLicenseDto>>().Result;
+                return View(courierLicenses);
+            }
+            return View("Error");
         }
 
 
         // GET: CourierLicense/Details/5
         public ActionResult Details(int id)
         {
-            //objective: communicate with our  courier license data api to retrieve one  courier license
-            //curl https://localhost:44328/api/courierlicensedata/findbyid/{id}
-
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            CourierLicenseDto SelectedCourierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
-            return View(SelectedCourierLicense);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var courierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
+                return View(courierLicense);
+            }
+            return View("Error");
         }
 
-        public ActionResult Error()
-        {
-
-            return View();
-        }
-
-        // GET: Order/New
+        // GET: CourierLicense/New
         public ActionResult New()
         {
             return View();
@@ -65,83 +56,68 @@ namespace humber_http_5226_collaborative_project.Controllers
 
         // POST: CourierLicense/Create
         [HttpPost]
-        public ActionResult Create(CourierLicense CourierLicense)
+        public ActionResult Create(CourierLicenseDto courierLicense)
         {
-            //objective: add a new courier license into our system using the API
-            //curl -H "Content-Type:application/json" -d @Order.json https://localhost:44328/api/courierlicensedata/createnew 
-            string url = "createnew";
+            var json = JsonConvert.SerializeObject(courierLicense);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-
-            string jsonpayload = jss.Serialize(CourierLicense);
-
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.PostAsync("createnew", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
 
             // GET: CourierLicense/Edit/5
             public ActionResult Edit(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            CourierLicenseDto SelectedCourierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
-            return View(SelectedCourierLicense);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                CourierLicenseDto SelectedCourierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
+                return View(SelectedCourierLicense);
+            }
+            return View("Error");
         }
 
         // POST: CourierLicense/Update/5
         [HttpPost]
-        public ActionResult Update(int id, CourierLicense CourierLicense)
+        public ActionResult Update(int id, CourierLicenseDto courierLicense)
         {
-            string url = "update/" + id;
-            string jsonpayload = jss.Serialize(CourierLicense);
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            var json = JsonConvert.SerializeObject(courierLicense);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PutAsync($"update/{id}", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
 
-        // GET: CourierLicense/Delete/5
+        // GET: CourierLicense/DeleteConfirm/5
         public ActionResult DeleteConfirm(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            CourierLicenseDto SelectedCourierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
-            return View(SelectedCourierLicense);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var courierLicense = response.Content.ReadAsAsync<CourierLicenseDto>().Result;
+                return View(courierLicense);
+            }
+            return View("Error");
         }
 
         // POST: CourierLicense/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, CourierLicense CourierLicense)
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
         {
-            string url = "delete/" + id;
-            HttpContent content = new StringContent("");
-            content.Headers.ContentType.MediaType = "application/json";
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
+            HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
     }
 }

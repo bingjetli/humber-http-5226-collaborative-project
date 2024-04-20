@@ -1,4 +1,5 @@
 ﻿using humber_http_5226_collaborative_project.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,139 +25,105 @@ namespace humber_http_5226_collaborative_project.Controllers {
         // GET: Order/List
         public ActionResult List()
         {
-            //objective: communicate with our order data api to retrieve a list of orders
-            //curl https://localhost:44321/api/orderdata/listall
-
-            //DetailsOrder ViewModel = new DetailsOrder();
-
-            string url = "listall";
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            IEnumerable<OrderDto> Orders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
-
-
-            return View(Orders);
+            HttpResponseMessage response = client.GetAsync("listall").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var orders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
+                return View(orders);
+            }
+            return View("Error");
         }
 
         // GET: Order/Details/5
         public ActionResult Details(int id)
         {
-            //objective: communicate with our order data api to retrieve one order
-            //curl https://localhost:44328/api/orderdata/findbyid/{id}
-
-            //DetailsOrder ViewModel = new DetailsOrder();
-
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
-
-            //ViewModel.SelectedOrder = SelectedOrder;
-
-            //url = "cafedata/ListCafesForOrder/" + id;
-            //response = client.GetAsync(url).Result;
-            //IEnumerable<CafeDto> RelatedCafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
-
-            //ViewModel.RelatedCafes = RelatedCafes;
-
-
-            //return View(ViewModel);
-
-            return View(SelectedOrder);
-        }
-
-        public ActionResult Error()
-        {
-
-            return View();
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var order = response.Content.ReadAsAsync<OrderDto>().Result;
+                return View(order);
+            }
+            return View("Error");
         }
 
         // GET: Order/New
         public ActionResult New()
         {
-            return View();
+            //information about all cafes in the system
+            //GET api/cafedata/listall
+
+            string url = "cafedata/listall/";
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            IEnumerable<CafeDto> CafeOptions = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
+
+
+            return View(CafeOptions);
         }
 
         // POST: Order/Create
         [HttpPost]
-        public ActionResult Create(Order Order)
+        public ActionResult Create(OrderDto order)
         {
-            //objective: add a new order into our system using the API
-            //curl -H "Content-Type:application/json" -d @Order.json https://localhost:44328/api/orderdata/createnew 
-            string url = "createnew";
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-
-            string jsonpayload = jss.Serialize(Order);
-
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.PostAsync("createnew", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
 
-        // POST: Order/Edit/5
+        // GET: Order/Edit/5
         public ActionResult Edit(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
-            return View(SelectedOrder);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
+                return View(SelectedOrder);
+            }
+            return View("Error");
         }
 
         // POST: Order/Update/5
         [HttpPost]
-        public ActionResult Update(int id, Order Order)
+        public ActionResult Update(int id, OrderDto order)
         {
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            string url = "update/" + id;
-            string jsonpayload = jss.Serialize(Order);
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.PutAsync($"update/{id}", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
 
-        // GET: Order/Delete/5
+        // GET: Order/DeleteConfirm/5
         public ActionResult DeleteConfirm(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
-            return View(SelectedOrder);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var order = response.Content.ReadAsAsync<OrderDto>().Result;
+                return View(order);
+            }
+            return View("Error");
         }
 
         // POST: Order/Delete/5
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            string url = "delete/" + id;
-            HttpContent content = new StringContent("");
-            content.Headers.ContentType.MediaType = "application/json";
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
+            HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
     }
 }

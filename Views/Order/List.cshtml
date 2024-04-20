@@ -1,20 +1,39 @@
 ﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderDto>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "List of Orders";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Browse Orders</h2>
+<h2>@ViewBag.Title</h2>
 
-<!--Button to create a new order-->
-<a href="/Order/New">New Order</a>
+<p>
+    @Html.ActionLink("Create New Order", "New", "Order", new { }, new { @class = "btn btn-primary" })
+</p>
 
-<!--List of orders-->
-@foreach (var order in Model)
-{
-    <div>
-        <h3><a href="/Order/Details/@order.OrderId">@order.OrderId</a></h3>
-        <p>@order.CreatedAt</p>
-    </div>
-}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Cafe</th>
+            <th>Created At</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => order.OrderId)</td>
+                <td>@Html.DisplayFor(modelItem => order.Name)</td>
+                <td>@Html.DisplayFor(modelItem => order.CreatedAt, "{0:yyyy-MM-dd}")</td>
+                <td>
+                    @Html.ActionLink("View Details", "Details", new { id = order.OrderId }, new { @class = "btn btn-info" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 

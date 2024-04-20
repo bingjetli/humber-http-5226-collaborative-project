@@ -1,23 +1,50 @@
-﻿using System;
+﻿using humber_http_5226_collaborative_project.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace humber_http_5226_collaborative_project.Controllers
 {
     public class OrderItemController : Controller
     {
-        // GET: OrderItem
-        public ActionResult Index()
+        private static readonly HttpClient client;
+        private JavaScriptSerializer jss = new JavaScriptSerializer();
+
+        static OrderItemController()
         {
-            return View();
+            client = new HttpClient();
+            client.BaseAddress = new Uri("https://localhost:44328/api/orderitemdata/");
+        }
+
+        /**   BASIC CRUD   */
+
+        // GET: OrderItem/List
+        public ActionResult List()
+        {
+            HttpResponseMessage response = client.GetAsync("listall").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var orderItems = response.Content.ReadAsAsync<IEnumerable<OrderItemDto>>().Result;
+                return View(orderItems);
+            }
+            return View("Error");
         }
 
         // GET: OrderItem/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var orderItem = response.Content.ReadAsAsync<OrderItemDto>().Result;
+                return View(orderItem);
+            }
+            return View("Error");
         }
 
         // GET: OrderItem/Create
@@ -28,62 +55,68 @@ namespace humber_http_5226_collaborative_project.Controllers
 
         // POST: OrderItem/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(OrderItemDto orderItem)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            var json = JsonConvert.SerializeObject(orderItem);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-                return RedirectToAction("Index");
-            }
-            catch
+            HttpResponseMessage response = client.PostAsync("createnew", content).Result;
+            if (response.IsSuccessStatusCode)
             {
-                return View();
+                return RedirectToAction("List");
             }
+            return View("Error");
         }
 
         // GET: OrderItem/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                OrderItemDto SelectedOrderItem = response.Content.ReadAsAsync<OrderItemDto>().Result;
+                return View(SelectedOrderItem);
+            }
+            return View("Error");
         }
 
         // POST: OrderItem/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, OrderItemDto orderItem)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var json = JsonConvert.SerializeObject(orderItem);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-                return RedirectToAction("Index");
-            }
-            catch
+            HttpResponseMessage response = client.PutAsync($"update/{id}", content).Result;
+            if (response.IsSuccessStatusCode)
             {
-                return View();
+                return RedirectToAction("List");
             }
+            return View("Error");
         }
 
         // GET: OrderItem/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult DeleteConfirm(int id)
         {
-            return View();
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var orderItem = response.Content.ReadAsAsync<OrderItemDto>().Result;
+                return View(orderItem);
+            }
+            return View("Error");
         }
 
         // POST: OrderItem/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
+            HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
+            if (response.IsSuccessStatusCode)
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
-            catch
-            {
-                return View();
-            }
+            return View("Error");
         }
     }
 }

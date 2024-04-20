@@ -1,44 +1,50 @@
-﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicenseDto>
+﻿@model humber_http_5226_collaborative_project.Models.CourierLicenseDto
 
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "Add New Courier License";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Add New Courier License</h2>
+<h2>@ViewBag.Title</h2>
 
-<form action="/CourierLicense/Create" method="post">
+@using (Html.BeginForm("Create", "CourierLicense", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
 
-    <!--Vehicle-->
-    <div>
-        <label for="VehicleType">Vehicle Type:</label>
-        <input type="text" id="VehicleType" name="VehicleType" required />
+    <div class="form-group">
+        @Html.LabelFor(model => model.VehicleType, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.VehicleType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.VehicleType, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--Whether a courier license is validated-->
-    <div>
-        <label for="IsValid">Is Valid:</label>
-        <select id="IsValid" name="IsValid">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsValid, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.IsValid, new { @class = "checkbox" })
+            @Html.ValidationMessageFor(model => model.IsValid, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--Whether a courier is available-->
-    <div>
-        <label for="IsAvailable">Is Available:</label>
-        <select id="IsAvailable" name="IsAvailable">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-        </select>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsAvailable, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.IsAvailable, new { @class = "checkbox" })
+            @Html.ValidationMessageFor(model => model.IsAvailable, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--When the license was issued-->
-    <div>
-        <label for="IssueDate">Issue Date:</label>
-        <input type="date" id="IssueDate" name="IssueDate" required />
+    <div class="form-group">
+        @Html.LabelFor(model => model.IssueDate, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.IssueDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.IssueDate, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <button type="submit">Create</button>
-    </div>
-</form>
 
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+}
