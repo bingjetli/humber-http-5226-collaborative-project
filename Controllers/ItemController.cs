@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using humber_http_5226_collaborative_project.Models;
+using Newtonsoft.Json;
 
 namespace humber_http_5226_collaborative_project.Controllers {
   public class ItemController : Controller {
@@ -25,56 +25,25 @@ namespace humber_http_5226_collaborative_project.Controllers {
         // GET: Item/List
         public ActionResult List()
         {
-            //objective: communicate with our item data api to retrieve a list of items
-            //curl https://localhost:44328/api/itemdata/listall
-
-
-            string url = "listall";
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            IEnumerable<ItemDto> Items = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
-
-
-            return View(Items);
+            HttpResponseMessage response = client.GetAsync("listall").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var items = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
+                return View(items);
+            }
+            return View("Error");
         }
 
         // GET: Item/Details/5
         public ActionResult Details(int id)
         {
-            //DetailsItem ViewModel = new DetailsItem();
-
-            //objective: communicate with our itemdata api to retrieve one one item
-            //curl https://localhost:44321/api/itemdata/findbyid/{id}
-
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            //Debug.WriteLine("The response code is: ");
-            //Debug.WriteLine(response.StatusCode);
-
-
-            ItemDto SelectedItem = response.Content.ReadAsAsync<ItemDto>().Result;
-            //Debug.WriteLine("The item recived is: ");
-            // Debug.WriteLine(SelectedItem.ItemId);
-
-            //ViewModel.SelectedItem = SelectedItem;
-
-            ////show all cafes with an item
-            //url = "cafedata/ListCafesWithItem/" + id;
-            //response = client.GetAsync(url).Result;
-            //IEnumerable<CafeDto> RelevantCafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
-
-            //ViewModel.RelevantCafes = RelevantCafes;
-
-            //return View(ViewModel);
-
-            return View(SelectedItem);
-        }
-
-        public ActionResult Error()
-        {
-
-            return View();
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var item = response.Content.ReadAsAsync<ItemDto>().Result;
+                return View(item);
+            }
+            return View("Error");
         }
 
         // GET: Item/New
@@ -85,89 +54,68 @@ namespace humber_http_5226_collaborative_project.Controllers {
 
         // POST: Item/Create
         [HttpPost]
-        public ActionResult Create(Item Item)
+        public ActionResult Create(ItemDto item)
         {
+            var json = JsonConvert.SerializeObject(item);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            //objective: add a new item into our system using the API
-            //curl -H "Content-Type:application/json" -d @Item.json https://localhost:44328/api/itemdata/createnew 
-            string url = "createnew";
-
-            string jsonpayload = jss.Serialize(Item);
-
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.PostAsync("createnew", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
-
 
         // GET: Item/Edit/5
         public ActionResult Edit(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            ItemDto SelectedItem = response.Content.ReadAsAsync<ItemDto>().Result;
-
-            return View(SelectedItem);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                ItemDto SelectedItem = response.Content.ReadAsAsync<ItemDto>().Result;
+                return View(SelectedItem);
+            }
+            return View("Error");
         }
 
         // POST: Item/Update/5
         [HttpPost]
-        public ActionResult Update(int id, Item Item)
+        public ActionResult Update(int id, ItemDto item)
         {
-            string url = "update/" + id;
+            var json = JsonConvert.SerializeObject(item);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            string jsonpayload = jss.Serialize(Item);
-
-            HttpContent content = new StringContent(jsonpayload);
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.PutAsync($"update/{id}", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
 
-        // GET: Item/Delete/5
+        // GET: Item/DeleteConfirm/5
         public ActionResult DeleteConfirm(int id)
         {
-            string url = "findbyid/" + id;
-            HttpResponseMessage response = client.GetAsync(url).Result;
-            ItemDto SelectedItem = response.Content.ReadAsAsync<ItemDto>().Result;
-            return View(SelectedItem);
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var item = response.Content.ReadAsAsync<ItemDto>().Result;
+                return View(item);
+            }
+            return View("Error");
         }
 
         // POST: Item/Delete/5
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            string url = "delete/" + id;
-            HttpContent content = new StringContent("");
-            content.Headers.ContentType.MediaType = "application/json";
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
+            HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
+            return View("Error");
         }
     }
 }

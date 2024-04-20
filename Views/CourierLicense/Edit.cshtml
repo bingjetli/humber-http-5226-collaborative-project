@@ -1,39 +1,56 @@
-﻿
+﻿@model humber_http_5226_collaborative_project.Models.viewmodel.DetailsCourierLicense
+
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Courier License";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Edit Courier License</h2>
-<a href="/CourierLicense/List">Back to List</a>
+<h2>@ViewBag.Title</h2>
 
-<form action="/CourierLicense/Edit/@Model.CourierLicenseId" method="post">
-    
-    <div>
-        <label for="VehicleType">Vehicle Type:</label>
-        <input type="text" id="VehicleType" name="VehicleType" value="@Model.VehicleType" required />
+@using (Html.BeginForm("Update", "CourierLicense", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.SelectedCourierLicense.CourierLicenseId) 
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedCourierLicense.VehicleType, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedCourierLicense.VehicleType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SelectedCourierLicense.VehicleType, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <label for="IsValid">Is Valid:</label>
-        <select id="IsValid" name="IsValid">
-            <option value="true" @(Model.IsValid ? "selected" : "")>Yes</option>
-            <option value="false" @(!Model.IsValid ? "selected" : "")>No</option>
-        </select>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedCourierLicense.IsValid, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.SelectedCourierLicense.IsValid, new { @class = "checkbox" })
+            @Html.ValidationMessageFor(model => model.SelectedCourierLicense.IsValid, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <label for="IsAvailable">Is Available:</label>
-        <select id="IsAvailable" name="IsAvailable">
-            <option value="true" @(Model.IsAvailable ? "selected" : "")>Yes</option>
-            <option value="false" @(!Model.IsAvailable ? "selected" : "")>No</option>
-        </select>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedCourierLicense.IsAvailable, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.SelectedCourierLicense.IsAvailable, new { @class = "checkbox" })
+            @Html.ValidationMessageFor(model => model.SelectedCourierLicense.IsAvailable, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <label for="IssueDate">Issue Date:</label>
-        <input type="date" id="IssueDate" name="IssueDate" value="@Model.IssueDate.ToString("yyyy-MM-dd")" required />
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedCourierLicense.IssueDate, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SelectedCourierLicense.IssueDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.SelectedCourierLicense.IssueDate, "", new { @class = "text-danger" })
+        </div>
     </div>
-    <div>
-        <button type="submit">Update</button>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
     </div>
-</form>
+}
 
 
 

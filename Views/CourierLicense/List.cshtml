@@ -1,19 +1,38 @@
 ﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicenseDto>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "List of Courier Licenses";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
+<h2>@ViewBag.Title</h2>
 
-<h2>Browse Courier Licenses</h2>
+<p>
+    @Html.ActionLink("Create New Courier License", "New", "CourierLicense", new { }, new { @class = "btn btn-primary" })
+</p>
 
-<a href="/CourierLicenses/New">Add New License</a>
 
-@foreach (var CourierLicenses in Model)
-{
-    <div>
-        <h3>@CourierLicenses.CourierLicenseId</h3>
-    </div>
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Vehicle Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var license in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => license.CourierLicenseId)</td>
+                <td>@Html.DisplayFor(modelItem => license.VehicleType)</td>
+                <td>
+                    @Html.ActionLink("View Details", "Details", new { id = license.CourierLicenseId }, new { @class = "btn btn-info" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 
 

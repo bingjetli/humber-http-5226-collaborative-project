@@ -216,7 +216,11 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
-    <Compile Include="Models\viewmodel\DetailsCafecs.cs" />
+    <Compile Include="Models\viewmodel\DetailsOrderItem.cs" />
+    <Compile Include="Models\viewmodel\DetailsCafe.cs" />
+    <Compile Include="Models\viewmodel\DetailsCourierLicense.cs" />
+    <Compile Include="Models\viewmodel\DetailsItem.cs" />
+    <Compile Include="Models\viewmodel\DetailsOrder.cs" />
     <Compile Include="Models\viewmodel\UpdateCafe.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -316,10 +320,15 @@
     <Content Include="Views\CourierLicense\Edit.cshtml" />
     <Content Include="Views\CourierLicense\Details.cshtml" />
     <Content Include="Views\CourierLicense\DeleteConfirm.cshtml" />
+    <Content Include="Views\OrderItem\New.cshtml" />
+    <Content Include="Views\OrderItem\List.cshtml" />
+    <Content Include="Views\OrderItem\Error.cshtml" />
+    <Content Include="Views\OrderItem\Edit.cshtml" />
+    <Content Include="Views\OrderItem\Details.cshtml" />
+    <Content Include="Views\OrderItem\DeleteConfirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\OrderItem\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

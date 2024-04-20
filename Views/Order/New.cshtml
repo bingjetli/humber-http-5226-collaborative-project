@@ -1,49 +1,51 @@
-﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderDto>
+﻿@model humber_http_5226_collaborative_project.Models.OrderDto
 
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "Place New Order";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
 }
 
-<h2>Create Order</h2>
+<h2>@ViewBag.Title</h2>
 
-<form action="/Order/Create" method="POST">
-    <div>
-        <!--Dropdown for cafe selection-->
-        <label for="CafeId">Cafe:</label>
-        <select id="CafeId" name="CafeId">
-            @foreach (var cafe in ViewBag.Cafes as IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>)
-            {
-                <option value="@cafe.CafeId">@cafe.Name</option>
-            }
-        </select>
+@using (Html.BeginForm("Create", "Order", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.CafeId, "Cafe", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CafeId, (SelectList)ViewBag.CafeId, "Select Cafe", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CafeId, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--Order date-->
-    <div>
-        <label for="CreatedAt">Order Date:</label>
-        <input type="date" id="CreatedAt" name="CreatedAt" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.CourierLicenseId, "Courier License", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.CourierLicenseId, (SelectList)ViewBag.CourierLicenseId, "Select License", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CourierLicenseId, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--Order status-->
-    <div>
-        <label for="Status">Status:</label>
-        <input type="text" id="Status" name="Status" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <!--Courier selection-->
-    <div>
-        <label for="CourierLicenseId">Courier (Optional):</label>
-        <select id="CourierLicenseId" name="CourierLicenseId">
-            <option value="">Select a Courier</option>
-            @foreach (var courier in ViewBag.Couriers as IEnumerable<humber_http_5226_collaborative_project.Models.CourierLicense>)
-            {
-                <option value="@courier.CourierLicenseId">@courier.CourierLicenseId</option>
-            }
-        </select>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CreatedAt, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CreatedAt, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.CreatedAt, "", new { @class = "text-danger" })
+        </div>
     </div>
 
-    <div>
-        <input type="submit" value="Create Order" />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Place Order" class="btn btn-default" />
+        </div>
     </div>
-</form>
+}
+
 

@@ -54,5 +54,6 @@ namespace humber_http_5226_collaborative_project.Models {
     public int Quantity { get; set; }
     public int? OrderId { get; set; }
     public int? ItemId { get; set; }
-  }
+    public ItemDto Item { get; set; }
+    }
 }

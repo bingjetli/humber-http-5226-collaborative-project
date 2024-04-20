@@ -8,8 +8,10 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using static humber_http_5226_collaborative_project.Models.Cafe;
+using humber_http_5226_collaborative_project.Migrations;
 using System.Web.Script.Serialization;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json;
 
 namespace humber_http_5226_collaborative_project.Controllers
 {
@@ -26,272 +28,151 @@ namespace humber_http_5226_collaborative_project.Controllers
 
         /**   BASIC CRUD   */
 
+
         // GET: Cafe/List
         public ActionResult List()
         {
-            //objective: with our cafe data api to retrieve a list of cafes
-            //curl https://localhost:44328/api/cafedata/listall
-
-            string url = "listall";
-
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            IEnumerable<CafeDto> Cafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
-
-            //returns Views/Cafe/List.cshtml
-            return View(Cafes);
-
+            HttpResponseMessage response = client.GetAsync("cafedata/listall").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var cafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
+                return View(cafes);
+            }
+            return View("Error");
         }
 
         // GET: Cafe/Details/5
         public ActionResult Details(int id)
         {
-
-            //objective: communicate with our cafe data api to retrieve one cafe
-            //curl https://localhost:44328/api/cafedata/findbyid/{id}
-
-            string url = "findbyid/"+id;
-
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-           // Debug.WriteLine("The response code is ");
-           //Debug.WriteLine(response.StatusCode);
-
-            CafeDto SelectedCafe = response.Content.ReadAsAsync<CafeDto>().Result;
-
-            //ViewModel.SelectedCafe = SelectedCafe;
-
-            //Debug.WriteLine("The cafe recieved is: " + SelectedCafe.CafeId);
-            //Debug.WriteLine(SelectedCafe.Name);
-
-            //show AVAILABLE items at this cafe
-            url = "itemdata/listavailablecafeitems/" + id;
-
-            response = client.GetAsync(url).Result;
-
-            IEnumerable<ItemDto> AvailableItems = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
-            //ViewModel.AvailableItems = AvailableItems;
-
-            //show UNAVAILABLE items at this cafe
-            url = "itemdata/listunavailablecafeitems/" + id;
-
-            response = client.GetAsync(url).Result;
-
-            IEnumerable<ItemDto> UnavailableItems = response.Content.ReadAsAsync<IEnumerable<ItemDto>>().Result;
-            //ViewModel.UnavailableItems = UnavailableItems;
-
-            //return View(ViewModel);
-            return View(SelectedCafe);
-
-        }
-
-        public ActionResult Error()
-        {
-            return View();
+            var response = client.GetAsync($"cafedata/findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var cafe = response.Content.ReadAsAsync<CafeDto>().Result;
+                return View(cafe);
+            }
+            return View("Error");
         }
 
         // GET: Cafe/New
         public ActionResult New()
         {
-            //information about all orders in the system
-            //GET api/orderdata/listorders
-
-            //string url = "orderdata/listorders/";
-            //HttpResponseMessage response = client.GetAsync(url).Result;
-            //IEnumerable<OrderDto> OrderOptions = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
-
-
-            //return View(OrderOptions);
             return View();
-
         }
 
         // POST: Cafe/Create
         [HttpPost]
-        public ActionResult Create(Cafe Cafe)
+        public ActionResult Create(CafeDto cafe)
         {
-            //objective: add a new cafe into the system using the API
-            //curl -H "Content-Type:application/json" -d @cafe.json https://localhost:44328/api/cafedata/createnew
-            string url = "createnew";
+            var json = JsonConvert.SerializeObject(cafe);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            string jsonpayload = jss.Serialize(Cafe);
-            //Debug.WriteLine(jsonpayload);
-
-            HttpContent content = new StringContent(jsonpayload);
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            var response = client.PostAsync("cafedata/createnew", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
-
+            return View("Error");
         }
 
         // GET: Cafe/Edit/5
         public ActionResult Edit(int id)
         {
-
-            //UpdateCafe ViewModel = new UpdateCafe();
+            UpdateCafe ViewModel = new UpdateCafe();
 
             //existing cafe info
-            string url = "findbyid/" + id;
-
+            string url = "cafedata/findcafe/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
-
             CafeDto SelectedCafe = response.Content.ReadAsAsync<CafeDto>().Result;
-            
-            //ViewModel.SelectedCafe = SelectedCafe;
+            ViewModel.SelectedCafe = SelectedCafe;
 
-            ////all orders to choose from when updating cafe
-            ////existing cafe info
-            //url = "orderdata/listorders/";
-            //response = client.GetAsync(url).Result;
-            //IEnumerable<OrderDto> OrderOptions = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
-    
-            //ViewModel.OrderOptions = OrderOptions;
-            //return View(ViewModel);
-
-            return View(SelectedCafe);
+            return View(ViewModel);
         }
 
         // POST: Cafe/Update/5
         [HttpPost]
-        public ActionResult Update(int id, Cafe cafe)
+        public ActionResult Update(int id, CafeDto cafe)
         {
-            string url = "update/" + id;
+            var json = JsonConvert.SerializeObject(cafe);
+            var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            string jsonpayload = jss.Serialize(cafe);
-
-            HttpContent content = new StringContent(jsonpayload);
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            var response = client.PutAsync($"cafedata/update/{id}", content).Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
-            {
-                return RedirectToAction("Error");
-            }
-
+            return View("Error");
         }
 
-        // GET: Cafe/Delete/5
+        // GET: Cafe/DeleteConfirm/5
         public ActionResult DeleteConfirm(int id)
         {
-            string url = "findbyid/" + id;
-
-            HttpResponseMessage response = client.GetAsync(url).Result;
-
-            CafeDto selectedcafe = response.Content.ReadAsAsync<CafeDto>().Result;
-
-            return View(selectedcafe);
+            HttpResponseMessage response = client.GetAsync($"cafedata/findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var cafe = response.Content.ReadAsAsync<CafeDto>().Result;
+                return View(cafe);
+            }
+            return View("Error");
         }
 
         // POST: Cafe/Delete/5
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            string url = "delete/" + id;
-
-            HttpContent content = new StringContent("");
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
+            HttpResponseMessage response = client.DeleteAsync($"cafedata/delete/{id}").Result;
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("List");
             }
-            else
+            return View("Error");
+        }
+
+        // POST: Cafe/LinkToItem
+        [HttpPost]
+        public ActionResult LinkToItem(int cafeId, int itemId)
+        {
+            var response = client.PostAsync($"cafedata/linktoitem/{cafeId}/{itemId}", null).Result;
+            if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Error");
+                return RedirectToAction("Details", new { id = cafeId });
             }
+            return View("Error");
         }
 
-        /** ASSOCIATIVE ROUTES */
-
-        ////POST: Cafe/LinkToItem/{CafeId}/{ItemId}
-        //[HttpPost]
-        public ActionResult LinkToItem(int id, int ItemId)
+        // POST: Cafe/UnlinkWithItem
+        [HttpPost]
+        public ActionResult UnlinkWithItem(int cafeId, int itemId)
         {
-            Debug.WriteLine("Attempting to link cafe :" + id + "with item" + ItemId);
-
-            //call api to link cafe with item
-            string url = "cafedata/linktoitem/" + id + "/" + ItemId;
-
-            HttpContent content = new StringContent("");
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
-            return RedirectToAction("Details/" + id);
+            var response = client.PostAsync($"cafedata/unlinkwithitem/{cafeId}/{itemId}", null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Details", new { id = cafeId });
+            }
+            return View("Error");
         }
 
-
-        //Get:Cafe/UnlinkWithItem/{id}?ItemId={ItemId}
-        [HttpGet]
-        public ActionResult UnlinkWithItem(int id, int ItemId)
+        // POST: Cafe/LinkToOrder
+        [HttpPost]
+        public ActionResult LinkToOrder(int cafeId, int orderId)
         {
-            //Debug.WriteLine("Attempting to unlink cafe :" + id + "with item" + ItemId);
-
-            //call api to unlink cafe with item
-            string url = "cafedata/unlinkwithitem/" + id + "/" + ItemId;
-
-            HttpContent content = new StringContent("");
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
-            return RedirectToAction("Details/" + id);
+            var response = client.PostAsync($"cafedata/linktoorder/{cafeId}/{orderId}", null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Details", new { id = cafeId });
+            }
+            return View("Error");
         }
 
-
-        ////POST: Cafe/LinkToOrder/{CafeId}/{OrderId}
-        //[HttpPost]
-        public ActionResult LinkToOrder(int id, int OrderId)
+        // POST: Cafe/UnlinkWithOrder
+        [HttpPost]
+        public ActionResult UnlinkWithOrder(int cafeId, int orderId)
         {
-            Debug.WriteLine("Attempting to link cafe :" + id + "with order" + OrderId);
-
-            //call api to link cafe with order
-            string url = "cafedata/linktoorder/" + id + "/" + OrderId;
-
-            HttpContent content = new StringContent("");
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
-            return RedirectToAction("Details/" + id);
-        }
-
-
-        //Get:Cafe/UnlinkWithItem/{id}?ItemId={itemId}
-        [HttpGet]
-        public ActionResult UnlinkWithOrder(int id, int OrderId)
-        {
-            //Debug.WriteLine("Attempting to unlink cafe :" + id + "with order" + OrderId);
-
-            //call api to unlink cafe with order
-            string url = "cafedata/unlinkwithorder/" + id + "/" + OrderId;
-
-            HttpContent content = new StringContent("");
-
-            content.Headers.ContentType.MediaType = "application/json";
-
-            HttpResponseMessage response = client.PostAsync(url, content).Result;
-
-            return RedirectToAction("Details/" + id);
+            var response = client.PostAsync($"cafedata/unlinkwithorder/{cafeId}/{orderId}", null).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Details", new { id = cafeId });
+            }
+            return View("Error");
         }
     }
 }

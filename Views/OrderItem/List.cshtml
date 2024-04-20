@@ -1,0 +1,42 @@
+﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.OrderItemDto>
+
+@{
+    ViewBag.Title = "List of Order Items";
+    //Layout = "~/Views/Shared/_Layout.cshtml"; (add layout file??)
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New OrderItem", "New", "OrderItem", new { }, new { @class = "btn btn-primary" })
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Item ID</th>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Order ID</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var orderItem in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => orderItem.OrderItemId)</td>
+                <td>@Html.DisplayFor(modelItem => orderItem.Item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => orderItem.Quantity)</td>
+                <td>@Html.DisplayFor(modelItem => orderItem.OrderId)</td>
+                <td>
+                    @Html.ActionLink("View Details", "Details", new { id = orderItem.OrderItemId }, new { @class = "btn btn-info" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

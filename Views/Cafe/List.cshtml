@@ -1,27 +1,29 @@
 ﻿@model IEnumerable<humber_http_5226_collaborative_project.Models.CafeDto>
 
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "List of Cafes";
 }
 
-<h2>Browse Cafes</h2>
-<!--Back to list button-->
-<a href="/Cafe/New">New Cafe</a>
+<h2>@ViewBag.Title</h2>
 
-<!--Cafe search field-->
-<!--<form action="/Cafe/List" method="GET">
-    <div>
-        <input type="text" name="SearchKey" />
-        <input type="submit" value="Search" />
-    </div>
-</!--form>-->
+<p>
+    @Html.ActionLink("Create New Cafe", "New", "Cafe", new { }, new { @class = "btn btn-primary" })
+</p>
 
-<!-- Loop displaying list of cafes-->
-@foreach (var Cafe in Model)
-{
-    <div>
-        <h3><a href="/Cafe/Details/@Cafe.CafeId">@Cafe.Name</a></h3>
-        <p>@Cafe.Address</p>
-    </div>
-   
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cafe in Model)
+        {
+            <tr>
+                <td>@Html.ActionLink(cafe.Name, "Details", new { id = cafe.CafeId })</td>
+                <td>@Html.DisplayFor(modelItem => cafe.Address)</td>
+            </tr>
+        }
+    </tbody>
+</table>
