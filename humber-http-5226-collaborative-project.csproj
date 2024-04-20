@@ -207,6 +207,10 @@
     <Compile Include="Migrations\202404200109367_setupDatabase.Designer.cs">
       <DependentUpon>202404200109367_setupDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs" />
+    <Compile Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.Designer.cs">
+      <DependentUpon>202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Cafe.cs" />
@@ -360,6 +364,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202404200109367_setupDatabase.resx">
       <DependentUpon>202404200109367_setupDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.resx">
+      <DependentUpon>202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

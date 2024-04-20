@@ -1,27 +1,24 @@
-﻿using humber_http_5226_collaborative_project.Models;
+﻿using humber_http_5226_collaborative_project.Migrations;
+using humber_http_5226_collaborative_project.Models;
 using humber_http_5226_collaborative_project.Models.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.Mvc;
-using static humber_http_5226_collaborative_project.Models.Cafe;
-using humber_http_5226_collaborative_project.Migrations;
 using System.Web.Script.Serialization;
-using System.Security.Cryptography.X509Certificates;
-using Newtonsoft.Json;
+using static humber_http_5226_collaborative_project.Models.Cafe;
 
-namespace humber_http_5226_collaborative_project.Controllers
-{
-    public class CafeController : Controller
-    {
+namespace humber_http_5226_collaborative_project.Controllers {
+    public class CafeController : Controller {
         private static readonly HttpClient client;
         private JavaScriptSerializer jss = new JavaScriptSerializer();
 
-        static CafeController()
-        { 
+        static CafeController() {
             client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:44328/api/cafedata/");
         }
@@ -30,11 +27,9 @@ namespace humber_http_5226_collaborative_project.Controllers
 
 
         // GET: Cafe/List
-        public ActionResult List()
-        {
-            HttpResponseMessage response = client.GetAsync("cafedata/listall").Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult List() {
+            HttpResponseMessage response = client.GetAsync("listall").Result;
+            if (response.IsSuccessStatusCode) {
                 var cafes = response.Content.ReadAsAsync<IEnumerable<CafeDto>>().Result;
                 return View(cafes);
             }
@@ -42,11 +37,9 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
         // GET: Cafe/Details/5
-        public ActionResult Details(int id)
-        {
-            var response = client.GetAsync($"cafedata/findbyid/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult Details(int id) {
+            var response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode) {
                 var cafe = response.Content.ReadAsAsync<CafeDto>().Result;
                 return View(cafe);
             }
@@ -54,33 +47,32 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
         // GET: Cafe/New
-        public ActionResult New()
-        {
+        [System.Web.Mvc.Authorize]
+        public ActionResult New() {
             return View();
         }
 
         // POST: Cafe/Create
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Create(CafeDto cafe)
-        {
+        public ActionResult Create(CafeDto cafe) {
             var json = JsonConvert.SerializeObject(cafe);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            var response = client.PostAsync("cafedata/createnew", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
+            var response = client.PostAsync("createnew", content).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
         }
 
         // GET: Cafe/Edit/5
-        public ActionResult Edit(int id)
-        {
+        [System.Web.Mvc.Authorize]
+        public ActionResult Edit(int id) {
             UpdateCafe ViewModel = new UpdateCafe();
 
             //existing cafe info
-            string url = "cafedata/findcafe/" + id;
+            string url = "findcafe/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             CafeDto SelectedCafe = response.Content.ReadAsAsync<CafeDto>().Result;
             ViewModel.SelectedCafe = SelectedCafe;
@@ -89,26 +81,24 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
         // POST: Cafe/Update/5
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Update(int id, CafeDto cafe)
-        {
+        public ActionResult Update(int id, CafeDto cafe) {
             var json = JsonConvert.SerializeObject(cafe);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-            var response = client.PutAsync($"cafedata/update/{id}", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
+            var response = client.PutAsync($"update/{id}", content).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
         }
 
         // GET: Cafe/DeleteConfirm/5
-        public ActionResult DeleteConfirm(int id)
-        {
-            HttpResponseMessage response = client.GetAsync($"cafedata/findbyid/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+        [System.Web.Mvc.Authorize]
+        public ActionResult DeleteConfirm(int id) {
+            HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
+            if (response.IsSuccessStatusCode) {
                 var cafe = response.Content.ReadAsAsync<CafeDto>().Result;
                 return View(cafe);
             }
@@ -116,60 +106,55 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
         // POST: Cafe/Delete/5
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Delete(int id)
-        {
-            HttpResponseMessage response = client.DeleteAsync($"cafedata/delete/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult Delete(int id) {
+            HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
         }
 
         // POST: Cafe/LinkToItem
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult LinkToItem(int cafeId, int itemId)
-        {
-            var response = client.PostAsync($"cafedata/linktoitem/{cafeId}/{itemId}", null).Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult LinkToItem(int cafeId, int itemId) {
+            var response = client.PostAsync($"linktoitem/{cafeId}/{itemId}", null).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("Details", new { id = cafeId });
             }
             return View("Error");
         }
 
         // POST: Cafe/UnlinkWithItem
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult UnlinkWithItem(int cafeId, int itemId)
-        {
-            var response = client.PostAsync($"cafedata/unlinkwithitem/{cafeId}/{itemId}", null).Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult UnlinkWithItem(int cafeId, int itemId) {
+            var response = client.PostAsync($"unlinkwithitem/{cafeId}/{itemId}", null).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("Details", new { id = cafeId });
             }
             return View("Error");
         }
 
         // POST: Cafe/LinkToOrder
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult LinkToOrder(int cafeId, int orderId)
-        {
-            var response = client.PostAsync($"cafedata/linktoorder/{cafeId}/{orderId}", null).Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult LinkToOrder(int cafeId, int orderId) {
+            var response = client.PostAsync($"linktoorder/{cafeId}/{orderId}", null).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("Details", new { id = cafeId });
             }
             return View("Error");
         }
 
         // POST: Cafe/UnlinkWithOrder
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult UnlinkWithOrder(int cafeId, int orderId)
-        {
-            var response = client.PostAsync($"cafedata/unlinkwithorder/{cafeId}/{orderId}", null).Result;
-            if (response.IsSuccessStatusCode)
-            {
+        public ActionResult UnlinkWithOrder(int cafeId, int orderId) {
+            var response = client.PostAsync($"unlinkwithorder/{cafeId}/{orderId}", null).Result;
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("Details", new { id = cafeId });
             }
             return View("Error");

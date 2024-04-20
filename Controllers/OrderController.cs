@@ -10,12 +10,11 @@ using System.Web.Script.Serialization;
 using static humber_http_5226_collaborative_project.Models.Cafe;
 
 namespace humber_http_5226_collaborative_project.Controllers {
-  public class OrderController : Controller {
-    private static readonly HttpClient client;
-    private JavaScriptSerializer jss = new JavaScriptSerializer();
+    public class OrderController : Controller {
+        private static readonly HttpClient client;
+        private JavaScriptSerializer jss = new JavaScriptSerializer();
 
-        static OrderController()
-        {
+        static OrderController() {
             client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:44328/api/orderdata/");
         }
@@ -23,11 +22,9 @@ namespace humber_http_5226_collaborative_project.Controllers {
         /**   BASIC CRUD   */
 
         // GET: Order/List
-        public ActionResult List()
-        {
+        public ActionResult List() {
             HttpResponseMessage response = client.GetAsync("listall").Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 var orders = response.Content.ReadAsAsync<IEnumerable<OrderDto>>().Result;
                 return View(orders);
             }
@@ -35,11 +32,9 @@ namespace humber_http_5226_collaborative_project.Controllers {
         }
 
         // GET: Order/Details/5
-        public ActionResult Details(int id)
-        {
+        public ActionResult Details(int id) {
             HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 var order = response.Content.ReadAsAsync<OrderDto>().Result;
                 return View(order);
             }
@@ -47,8 +42,8 @@ namespace humber_http_5226_collaborative_project.Controllers {
         }
 
         // GET: Order/New
-        public ActionResult New()
-        {
+        [System.Web.Mvc.Authorize]
+        public ActionResult New() {
             //information about all cafes in the system
             //GET api/cafedata/listall
 
@@ -61,26 +56,24 @@ namespace humber_http_5226_collaborative_project.Controllers {
         }
 
         // POST: Order/Create
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Create(OrderDto order)
-        {
+        public ActionResult Create(OrderDto order) {
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = client.PostAsync("createnew", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
         }
 
         // GET: Order/Edit/5
-        public ActionResult Edit(int id)
-        {
+        [System.Web.Mvc.Authorize]
+        public ActionResult Edit(int id) {
             HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 OrderDto SelectedOrder = response.Content.ReadAsAsync<OrderDto>().Result;
                 return View(SelectedOrder);
             }
@@ -88,26 +81,24 @@ namespace humber_http_5226_collaborative_project.Controllers {
         }
 
         // POST: Order/Update/5
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Update(int id, OrderDto order)
-        {
+        public ActionResult Update(int id, OrderDto order) {
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = client.PutAsync($"update/{id}", content).Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
         }
 
         // GET: Order/DeleteConfirm/5
-        public ActionResult DeleteConfirm(int id)
-        {
+        [System.Web.Mvc.Authorize]
+        public ActionResult DeleteConfirm(int id) {
             HttpResponseMessage response = client.GetAsync($"findbyid/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 var order = response.Content.ReadAsAsync<OrderDto>().Result;
                 return View(order);
             }
@@ -115,12 +106,11 @@ namespace humber_http_5226_collaborative_project.Controllers {
         }
 
         // POST: Order/Delete/5
+        [System.Web.Mvc.Authorize]
         [HttpPost]
-        public ActionResult Delete(int id)
-        {
+        public ActionResult Delete(int id) {
             HttpResponseMessage response = client.DeleteAsync($"delete/{id}").Result;
-            if (response.IsSuccessStatusCode)
-            {
+            if (response.IsSuccessStatusCode) {
                 return RedirectToAction("List");
             }
             return View("Error");
