@@ -10,10 +10,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace humber_http_5226_collaborative_project.Controllers
-{
-    public class OrderDataController : ApiController
-    {
+namespace humber_http_5226_collaborative_project.Controllers {
+    public class OrderDataController : ApiController {
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
@@ -31,8 +29,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(IEnumerable<OrderDto>))]
         [HttpGet]
-        public IEnumerable<OrderDto> ListAll()
-        {
+        public IEnumerable<OrderDto> ListAll() {
             return db.Orders.AsEnumerable().Select(o => o.ToDto());
         }
 
@@ -49,12 +46,10 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(OrderDto))]
         [HttpGet]
-        public IHttpActionResult FindById(int id)
-        {
+        public IHttpActionResult FindById(int id) {
             Order result = db.Orders.Find(id);
 
-            if (result == null)
-            {
+            if (result == null) {
                 return NotFound();
             }
 
@@ -75,10 +70,8 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(OrderDto))]
         [HttpPost]
-        public IHttpActionResult CreateNew(Order order)
-        {
-            if (!ModelState.IsValid)
-            {
+        public IHttpActionResult CreateNew(Order order) {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
@@ -106,16 +99,13 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(void))]
         [HttpPost]
-        public IHttpActionResult Update(int id, Order order)
-        {
-            if (!ModelState.IsValid)
-            {
+        public IHttpActionResult Update(int id, Order order) {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
 
-            if (id != order.OrderId)
-            {
+            if (id != order.OrderId) {
                 return BadRequest();
             }
 
@@ -123,18 +113,14 @@ namespace humber_http_5226_collaborative_project.Controllers
             db.Entry(order).State = EntityState.Modified;
 
 
-            try
-            {
+            try {
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(id))
-                {
+            catch (DbUpdateConcurrencyException) {
+                if (!OrderExists(id)) {
                     return NotFound();
                 }
-                else
-                {
+                else {
                     throw;
                 }
             }
@@ -157,11 +143,9 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(OrderDto))]
         [HttpPost]
-        public IHttpActionResult Delete(int id)
-        {
+        public IHttpActionResult Delete(int id) {
             Order order = db.Orders.Find(id);
-            if (order == null)
-            {
+            if (order == null) {
                 return NotFound();
             }
 
@@ -190,20 +174,17 @@ namespace humber_http_5226_collaborative_project.Controllers
         [HttpPost]
         [Route("api/OrderData/LinkToCafe/{order_id}/{cafe_id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult LinkToCafe(int order_id, int cafe_id)
-        {
+        public IHttpActionResult LinkToCafe(int order_id, int cafe_id) {
             Cafe target_cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
             Order order = db.Orders.Include(o => o.Cafe).Where(o => o.OrderId == order_id).FirstOrDefault();
 
 
-            if (order == null || target_cafe == null)
-            {
+            if (order == null || target_cafe == null) {
                 return BadRequest();
             }
 
 
-            if (order.Cafe.Equals(null))
-            {
+            if (order.Cafe.Equals(null)) {
 
                 //If the target order is already linked to a cafe, then the user must
                 //unlink with the previous cafe before linking to a new one.
@@ -211,8 +192,7 @@ namespace humber_http_5226_collaborative_project.Controllers
             }
 
 
-            if (order.CafeId != null)
-            {
+            if (order.CafeId != null) {
                 return BadRequest();
             }
 
@@ -220,8 +200,7 @@ namespace humber_http_5226_collaborative_project.Controllers
             order.Cafe = target_cafe;
 
             //Only create the link if it doesn't already exist.
-            if (target_cafe.Orders.Contains(order) == false)
-            {
+            if (target_cafe.Orders.Contains(order) == false) {
                 target_cafe.Orders.Add(order);
             }
 
@@ -247,14 +226,12 @@ namespace humber_http_5226_collaborative_project.Controllers
         [HttpPost]
         [Route("api/OrderData/UnlinkWithCafe/{order_id}/{cafe_id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult UnlinkWithCafe(int order_id, int cafe_id)
-        {
+        public IHttpActionResult UnlinkWithCafe(int order_id, int cafe_id) {
             Cafe target_cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
             Order order = db.Orders.Include(o => o.Cafe).Where(o => o.OrderId == order_id).FirstOrDefault();
 
 
-            if (order == null || target_cafe == null)
-            {
+            if (order == null || target_cafe == null) {
                 return BadRequest();
             }
 
@@ -282,13 +259,11 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [HttpGet]
         [ResponseType(typeof(IEnumerable<CafeDto>))]
-        public IHttpActionResult GetLinkedCafes(int id)
-        {
+        public IHttpActionResult GetLinkedCafes(int id) {
             Order order = db.Orders.Include(o => o.Cafe).Where(o => o.OrderId == id).FirstOrDefault();
 
 
-            if (order == null)
-            {
+            if (order == null) {
                 return BadRequest();
             }
 
@@ -297,5 +272,17 @@ namespace humber_http_5226_collaborative_project.Controllers
         }
 
 
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                db.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+
+        private bool OrderExists(int id) {
+            return db.OrderItems.Count(e => e.OrderItemId == id) > 0;
+        }
     }
 }

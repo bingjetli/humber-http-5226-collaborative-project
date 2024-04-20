@@ -10,10 +10,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 
-namespace humber_http_5226_collaborative_project.Controllers
-{
-    public class ItemDataController : ApiController
-    {
+namespace humber_http_5226_collaborative_project.Controllers {
+    public class ItemDataController : ApiController {
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
@@ -31,8 +29,7 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(IEnumerable<ItemDto>))]
         [HttpGet]
-        public IEnumerable<ItemDto> ListAll()
-        {
+        public IEnumerable<ItemDto> ListAll() {
             return db.Items.AsEnumerable().Select(i => i.ToDto());
         }
 
@@ -49,12 +46,10 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(ItemDto))]
         [HttpGet]
-        public IHttpActionResult FindById(int id)
-        {
+        public IHttpActionResult FindById(int id) {
             Item result = db.Items.Find(id);
 
-            if (result == null)
-            {
+            if (result == null) {
                 return NotFound();
             }
 
@@ -75,10 +70,8 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(ItemDto))]
         [HttpPost]
-        public IHttpActionResult CreateNew(Item item)
-        {
-            if (!ModelState.IsValid)
-            {
+        public IHttpActionResult CreateNew(Item item) {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
@@ -105,16 +98,13 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(void))]
         [HttpPost]
-        public IHttpActionResult Update(int id, Item item)
-        {
-            if (!ModelState.IsValid)
-            {
+        public IHttpActionResult Update(int id, Item item) {
+            if (!ModelState.IsValid) {
                 return BadRequest(ModelState);
             }
 
 
-            if (id != item.ItemId)
-            {
+            if (id != item.ItemId) {
                 return BadRequest();
             }
 
@@ -122,18 +112,14 @@ namespace humber_http_5226_collaborative_project.Controllers
             db.Entry(item).State = EntityState.Modified;
 
 
-            try
-            {
+            try {
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ItemExists(id))
-                {
+            catch (DbUpdateConcurrencyException) {
+                if (!ItemExists(id)) {
                     return NotFound();
                 }
-                else
-                {
+                else {
                     throw;
                 }
             }
@@ -156,11 +142,9 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [ResponseType(typeof(ItemDto))]
         [HttpPost]
-        public IHttpActionResult Delete(int id)
-        {
+        public IHttpActionResult Delete(int id) {
             Item item = db.Items.Find(id);
-            if (item == null)
-            {
+            if (item == null) {
                 return NotFound();
             }
 
@@ -189,25 +173,21 @@ namespace humber_http_5226_collaborative_project.Controllers
         [HttpPost]
         [Route("api/ItemData/LinkToCafe/{item_id}/{cafe_id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult LinkToCafe(int item_id, int cafe_id)
-        {
+        public IHttpActionResult LinkToCafe(int item_id, int cafe_id) {
             Item item = db.Items.Include(i => i.CafesWithThisItem).Where(i => i.ItemId == item_id).FirstOrDefault();
             Cafe target_cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
 
 
-            if (item == null || target_cafe == null)
-            {
+            if (item == null || target_cafe == null) {
                 return BadRequest();
             }
 
 
             //Only create the link if it doesn't already exist.
-            if (target_cafe.Menu.Contains(item) == false)
-            {
+            if (target_cafe.Menu.Contains(item) == false) {
                 target_cafe.Menu.Add(item);
             }
-            if (item.CafesWithThisItem.Contains(target_cafe) == false)
-            {
+            if (item.CafesWithThisItem.Contains(target_cafe) == false) {
                 item.CafesWithThisItem.Add(target_cafe);
             }
             db.SaveChanges();
@@ -232,25 +212,21 @@ namespace humber_http_5226_collaborative_project.Controllers
         [HttpPost]
         [Route("api/ItemData/UnlinkWithCafe/{item_id}/{cafe_id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult UnlinkWithCafe(int item_id, int cafe_id)
-        {
+        public IHttpActionResult UnlinkWithCafe(int item_id, int cafe_id) {
             Item item = db.Items.Include(i => i.CafesWithThisItem).Where(i => i.ItemId == item_id).FirstOrDefault();
             Cafe target_cafe = db.Cafes.Include(c => c.Menu).Where(c => c.CafeId == cafe_id).FirstOrDefault();
 
 
-            if (item == null || target_cafe == null)
-            {
+            if (item == null || target_cafe == null) {
                 return BadRequest();
             }
 
 
             //Only destroy the link if it exists.
-            if (target_cafe.Menu.Contains(item) == true)
-            {
+            if (target_cafe.Menu.Contains(item) == true) {
                 target_cafe.Menu.Remove(item);
             }
-            if (item.CafesWithThisItem.Contains(target_cafe) == true)
-            {
+            if (item.CafesWithThisItem.Contains(target_cafe) == true) {
                 item.CafesWithThisItem.Remove(target_cafe);
             }
             db.SaveChanges();
@@ -273,18 +249,30 @@ namespace humber_http_5226_collaborative_project.Controllers
         /// </example>
         [HttpGet]
         [ResponseType(typeof(IEnumerable<CafeDto>))]
-        public IHttpActionResult GetLinkedCafes(int id)
-        {
+        public IHttpActionResult GetLinkedCafes(int id) {
             Item item = db.Items.Include(i => i.CafesWithThisItem).Where(i => i.ItemId == id).FirstOrDefault();
 
 
-            if (item == null)
-            {
+            if (item == null) {
                 return BadRequest();
             }
 
 
             return Ok(item.CafesWithThisItem.AsEnumerable().Select(c => c.ToDto()));
+        }
+
+
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                db.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+
+        private bool ItemExists(int id) {
+            return db.Items.Count(e => e.ItemId == id) > 0;
         }
     }
 }

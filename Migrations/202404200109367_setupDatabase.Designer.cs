@@ -7,13 +7,13 @@ namespace humber_http_5226_collaborative_project.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class initial_setup : IMigrationMetadata
+    public sealed partial class setupDatabase : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initial_setup));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(setupDatabase));
         
         string IMigrationMetadata.Id
         {
-            get { return "202404060812434_initial_setup"; }
+            get { return "202404200109367_setupDatabase"; }
         }
         
         string IMigrationMetadata.Source

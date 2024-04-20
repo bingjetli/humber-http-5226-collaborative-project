@@ -203,9 +203,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202404060812434_initial_setup.cs" />
-    <Compile Include="Migrations\202404060812434_initial_setup.Designer.cs">
-      <DependentUpon>202404060812434_initial_setup.cs</DependentUpon>
+    <Compile Include="Migrations\202404200109367_setupDatabase.cs" />
+    <Compile Include="Migrations\202404200109367_setupDatabase.Designer.cs">
+      <DependentUpon>202404200109367_setupDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs" />
+    <Compile Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.Designer.cs">
+      <DependentUpon>202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -358,8 +362,11 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202404060812434_initial_setup.resx">
-      <DependentUpon>202404060812434_initial_setup.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202404200109367_setupDatabase.resx">
+      <DependentUpon>202404200109367_setupDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202404201919315_temporarilyRemovedDOBAddressFromIdentity.resx">
+      <DependentUpon>202404201919315_temporarilyRemovedDOBAddressFromIdentity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
