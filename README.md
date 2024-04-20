@@ -51,4 +51,4 @@ To set up the project locally, follow these steps:
 ## Contributions
 - Bailey: Setup project repository, models, associations, initial migrations, standardized WebAPI routes
 - Khushi:
-- Sarah:
+- Sarah: Controllers, views, readme
